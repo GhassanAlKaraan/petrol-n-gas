@@ -103,26 +103,36 @@ class _HomePageState extends State<HomePage> {
           // categories -> horizontal listview
 
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Text(
-              "Petrol",
-              style: GoogleFonts.notoSerif(
-                //fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-          ),
-                    
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    "== Petrol ==",
+                    style: GoogleFonts.notoSerif(
+                      //fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    "Accessories",
+                    style: GoogleFonts.notoSerif(
+                      //fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              )),
+
           // recent orders -> show last 3
           Expanded(
             child: Consumer<CartModel>(
               builder: (context, value, child) {
                 return GridView.builder(
                   padding: const EdgeInsets.all(12),
-                  physics: const NeverScrollableScrollPhysics(),
+                  // physics: const NeverScrollableScrollPhysics(),
                   itemCount: value.shopItems.length,
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 1 / 1.2,
                   ),
