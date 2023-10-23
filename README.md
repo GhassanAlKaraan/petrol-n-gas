@@ -1,3 +1,3 @@
 # petrol_n_gas
 
-A new Flutter project.
+Flutter app for gas stations to sell petrol and gas to customers.
