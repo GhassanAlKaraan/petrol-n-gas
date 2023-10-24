@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "198178371334",
+    "project_id": "petrol-n-gas",
+    "storage_bucket": "petrol-n-gas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:198178371334:android:bf43e0f5e61ba2266d5087",
+        "android_client_info": {
+          "package_name": "com.example.petrol_n_gas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnk2Y6i_gP7JKI6U-vCZdidYNXm1Z7_Ic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

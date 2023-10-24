@@ -7,6 +7,9 @@ environment:
   sdk: '>=3.2.0-210.1.beta <4.0.0'
 
 dependencies:
+  cloud_firestore: ^4.11.0
+  firebase_auth: ^4.11.1
+  firebase_core: ^2.19.0
   flutter:
     sdk: flutter
   google_fonts: ^6.1.0
@@ -21,4 +24,4 @@ flutter:
   uses-material-design: true
 
   assets:
-    - lib/images/
+    - assets/images/

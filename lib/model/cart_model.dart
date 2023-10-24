@@ -4,15 +4,16 @@ class CartModel extends ChangeNotifier {
   // list of items on sale
   final List _shopItems = const [
     // [ itemName, itemPrice, imagePath, color ]
-    ["Oil", "4.00", "lib/images/oil-barrel.png", Colors.green],
-    ["Benzine 95", "2.50", "lib/images/petrol.png", Colors.yellow],
-    ["Benzine 97", "12.80", "lib/images/petrol.png", Colors.red],
-    ["Gas", "1.00", "lib/images/gas-cylinder.png", Colors.blue],
-    ["Gas", "1.00", "lib/images/gas-cylinder.png", Colors.blue],
-    ["Gas", "1.00", "lib/images/gas-cylinder.png", Colors.blue],
+    ["Oil", "4.00", "assets/images/oil-barrel.png", Colors.green],
+    ["Benzine 95", "2.50", "assets/images/petrol.png", Colors.yellow],
+    ["Benzine 97", "12.80", "assets/images/petrol.png", Colors.red],
+    ["Gas", "1.00", "assets/images/gas-cylinder.png", Colors.blue],
+    ["Gas 2", "1.00", "assets/images/gas-cylinder.png", Colors.blue],
+    ["Gas 3", "1.00", "assets/images/gas-cylinder.png", Colors.blue],
   ];
 
   // list of cart items
+  // ignore: prefer_final_fields
   List _cartItems = [];
 
   get cartItems => _cartItems;

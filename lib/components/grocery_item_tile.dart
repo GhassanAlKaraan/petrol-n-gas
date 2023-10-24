@@ -6,6 +6,7 @@ class GroceryItemTile extends StatelessWidget {
   final String itemName;
   final String itemPrice;
   final String imagePath;
+  // ignore: prefer_typing_uninitialized_variables
   final color;
   void Function()? onPressed;
 
@@ -52,7 +53,7 @@ class GroceryItemTile extends StatelessWidget {
               onPressed: onPressed,
               color: color,
               child: Text(
-                '\$' + itemPrice,
+                '\$$itemPrice',
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

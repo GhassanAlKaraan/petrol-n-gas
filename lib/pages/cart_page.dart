@@ -58,6 +58,7 @@ class CartPage extends StatelessWidget {
                               style: const TextStyle(fontSize: 18),
                             ),
                             subtitle: Text(
+                              // ignore: prefer_interpolation_to_compose_strings
                               '\$' + value.cartItems[index][1],
                               style: const TextStyle(fontSize: 12),
                             ),

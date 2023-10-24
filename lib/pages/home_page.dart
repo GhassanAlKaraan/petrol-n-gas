@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
+import 'package:petrol_n_gas/utility/utils.dart';
 import 'package:provider/provider.dart';
 import '../components/grocery_item_tile.dart';
 import '../model/cart_model.dart';
@@ -13,6 +15,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  void _signout() {
+    FirebaseAuthHelper().logout();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,15 +43,23 @@ class _HomePageState extends State<HomePage> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 24.0),
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(
-                Icons.person,
-                color: Colors.grey,
+            child: GestureDetector(
+              onTap: () =>
+                  Utility.showAlertDialog(context, _signout, "Sign Out"),
+              child: Container(
+                height: 50,
+                width: 50,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Center(
+                  child: Icon(
+                    Icons.person,
+                    color: Colors.grey,
+                  ),
+                ),
               ),
             ),
           ),
@@ -107,24 +121,25 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  //todo: add PageViewBuilder
                   Text(
                     "== Petrol ==",
                     style: GoogleFonts.notoSerif(
-                      //fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
                   ),
                   Text(
                     "Accessories",
                     style: GoogleFonts.notoSerif(
-                      //fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
                   ),
                 ],
               )),
 
-          // recent orders -> show last 3
+          //todo: Provider should communicate with the firestore
           Expanded(
             child: Consumer<CartModel>(
               builder: (context, value, child) {
