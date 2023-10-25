@@ -1,7 +1,7 @@
 class Order {
   final String userId; // User's ID
   final List<OrderItem> items; // List of items in the order
-  final DateTime orderTime; // Date and time of order //current timestamp(now)
+  final DateTime orderTime; // * or use Timestamp? Time of the order
   final double totalAmount; // Total order amount
 
   Order({
