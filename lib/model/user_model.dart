@@ -1,6 +1,6 @@
 class UserModel {
   String email;
-  String role; //admin, user
+  String role; //admin, customer.
 
   UserModel({required this.email,required this.role});
 
