@@ -7,8 +7,8 @@ class ProductModel {
 
 
   final String name;
-  final String price;
-  final String quantity;
+  final int price;
+  final int quantity;
   final String category;
 
     Map<String, dynamic> toMap() {

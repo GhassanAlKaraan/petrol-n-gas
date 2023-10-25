@@ -7,6 +7,20 @@ import '../model/cart_model.dart';
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
 
+
+String checkCategory(String category){
+  switch (category) {
+    case "petrol":
+      return "assets/images/petrol.png";
+    case "gas":
+      return "assets/images/gas-cylinder.png";
+    //todo: add accessories.
+    default:
+      return "assets/images/petrol.png";
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,16 +64,18 @@ class CartPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8)),
                           child: ListTile(
                             leading: Image.asset(
-                              value.cartItems[index][2],
+
+                              // value.cartItems[index].category == "petrol" ? "assets/images/petrol.png" : "assets/images/gas-cylinder.png",
+                              checkCategory(value.cartItems[index].category),
                               height: 36,
                             ),
                             title: Text(
-                              value.cartItems[index][0],
+                              value.cartItems[index].name,
                               style: const TextStyle(fontSize: 18),
                             ),
                             subtitle: Text(
                               // ignore: prefer_interpolation_to_compose_strings
-                              '\$' + value.cartItems[index][1],
+                              '\$' + value.cartItems[index].price.toString(),
                               style: const TextStyle(fontSize: 12),
                             ),
                             trailing: IconButton(
@@ -120,7 +136,7 @@ class CartPage extends StatelessWidget {
                         child: const Row(
                           children: [
                             Text(
-                              'Pay Now',
+                              'Order Now',
                               style: TextStyle(color: Colors.white),
                             ),
                             Icon(

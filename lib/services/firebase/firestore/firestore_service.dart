@@ -6,9 +6,8 @@ import 'package:petrol_n_gas/model/user_model.dart';
 class FirestoreService {
   //********** Working with Products/Orders **********//
   //todo
-  /// Events Collection Reference
-  // final CollectionReference _events =
-  //     FirebaseFirestore.instance.collection('events');
+  final CollectionReference _products =
+      FirebaseFirestore.instance.collection('products');
 
   /// CREATE
   // Future<void> createEvent(EventModel event) async {
@@ -32,10 +31,12 @@ class FirestoreService {
   // }
 
   /// READ
-  // Stream is used to listen to changes in the database.
-  // Stream<QuerySnapshot> getEventsStream() {
-  //   return _events.orderBy('timestamp', descending: true).snapshots();
-  // }
+  Stream<QuerySnapshot> getPetrolProductsStream() {
+    return _products.where('category', isEqualTo: 'petrol').snapshots();
+  }
+  Stream<QuerySnapshot> getGasProductsStream() {
+    return _products.where('category', isEqualTo: 'gas').snapshots();
+  }
 
   /// DELETE
   // Future<void> deleteEvent(String docId) async {

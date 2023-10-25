@@ -12,8 +12,8 @@ import '../../utility/utils.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key, this.onTap});
-
+  //const LoginPage({super.key, this.onTap});
+  const LoginPage({super.key, required this.onTap});
   final void Function()? onTap;
 
   @override
@@ -112,9 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Text("Don't have an account? ", style: kTxtNSmall),
                     GestureDetector(
-                      onTap: () {
-                        widget.onTap;
-                      },
+                      onTap: widget.onTap,
                       child: Text("Register",
                           style: kTxtNSmall.copyWith(color: Colors.blue)),
                     )

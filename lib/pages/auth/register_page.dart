@@ -11,7 +11,7 @@ import 'package:petrol_n_gas/utility/constants.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key, this.onTap});
+  const RegisterPage({super.key, required this.onTap});
   final void Function()? onTap;
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -124,9 +124,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: [
                     Text("Already a user? ", style: kTxtNSmall),
                     GestureDetector(
-                      onTap: () {
-                        widget.onTap;
-                      },
+                      onTap: widget.onTap,
                       child: Text("Login",
                           style: kTxtNSmall.copyWith(color: Colors.blue)),
                     )

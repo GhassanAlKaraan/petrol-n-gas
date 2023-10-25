@@ -1,11 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:petrol_n_gas/components/gas_grid.dart';
+import 'package:petrol_n_gas/components/petrol_grid.dart';
 import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
-import 'package:provider/provider.dart';
-import '../components/grocery_item_tile.dart';
-import '../model/cart_model.dart';
 import 'cart_page.dart';
+
+//tab bat
+class TabBarObjects {
+  String text;
+  IconData? icon;
+
+  TabBarObjects({required this.text, required this.icon});
+}
+
+final List _tabList = [
+  TabBarObjects(text: "Petrol", icon: Icons.oil_barrel),
+  TabBarObjects(text: "Gas", icon: Icons.oil_barrel_outlined),
+  TabBarObjects(text: "Accessory", icon: Icons.more),
+];
+
+List<Widget> _productList = [
+  const PetrolGridView(),
+  const GasGridView(),
+  const TestingWidget(),
+];
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,8 +38,16 @@ class _HomePageState extends State<HomePage> {
     FirebaseAuthHelper().logout();
   }
 
+  int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
+    final PageController pageController = PageController(initialPage: 0);
+    void goToPage(int index) {
+      pageController.animateToPage(index,
+          duration: const Duration(milliseconds: 200), curve: Curves.easeInOut);
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -112,62 +139,92 @@ class _HomePageState extends State<HomePage> {
             child: Divider(),
           ),
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 8),
 
-          // categories -> horizontal listview
-
+          //* Tab bar
           Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  //todo: add PageViewBuilder
-                  Text(
-                    "== Petrol ==",
-                    style: GoogleFonts.notoSerif(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                  Text(
-                    "Accessories",
-                    style: GoogleFonts.notoSerif(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              )),
-
-          //todo: Provider should communicate with the firestore
-          Expanded(
-            child: Consumer<CartModel>(
-              builder: (context, value, child) {
-                return GridView.builder(
-                  padding: const EdgeInsets.all(12),
-                  // physics: const NeverScrollableScrollPhysics(),
-                  itemCount: value.shopItems.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1 / 1.2,
-                  ),
+            padding: const EdgeInsets.all(20.0),
+            child: SizedBox(
+              height: 50,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _tabList.length,
                   itemBuilder: (context, index) {
-                    return GroceryItemTile(
-                      itemName: value.shopItems[index][0],
-                      itemPrice: value.shopItems[index][1],
-                      imagePath: value.shopItems[index][2],
-                      color: value.shopItems[index][3],
-                      onPressed: () =>
-                          Provider.of<CartModel>(context, listen: false)
-                              .addItemToCart(index),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: tabBarButtons(
+                          _tabList[index], index, () => goToPage(index)),
                     );
-                  },
-                );
-              },
+                  }),
             ),
-          )
+          ),
+
+          // Expanded(
+          //   child: ProductGridView(),
+          // ),
+
+          Expanded(
+              child: PageView(
+            controller: pageController,
+            children: _productList,
+          )),
         ],
       ),
     );
+  }
+
+  GestureDetector tabBarButtons(
+      TabBarObjects list, int index1, Function() choose) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          currentIndex =
+              index1; //* the global current index will change depending on the index of the button
+          print(currentIndex);
+          choose(); //* the function will be called when the button is pressed
+        });
+      },
+      child: AnimatedContainer(
+        curve: Curves.linearToEaseOut,
+        width: currentIndex == index1 ? 130 : 50,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: currentIndex == index1 ? Colors.indigo : Colors.orange,
+        ),
+        duration: const Duration(milliseconds: 200),
+        child: Center(
+            child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            const SizedBox(
+              width: 10,
+            ),
+            Icon(
+              currentIndex == index1
+                  ? _tabList[currentIndex].icon
+                  : _tabList[index1].icon,
+              color: Colors.white,
+            ),
+            Expanded(
+              child: Text(
+                currentIndex == index1 ? " ${_tabList[currentIndex].text}" : "",
+                style: const TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+          ],
+        )),
+      ),
+    );
+  }
+}
+
+class TestingWidget extends StatelessWidget {
+  const TestingWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text("HELLO"),);
   }
 }
