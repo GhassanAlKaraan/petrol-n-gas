@@ -78,7 +78,7 @@ class Utility {
                 TextButton(
                   child: const Text(
                     'Cancel',
-                    style: TextStyle(fontSize: 18, color: Color(0xff214183),),
+                    style: TextStyle(fontSize: 22, color: Color(0xff214183),),
                   ),
                   onPressed: () {
                     Navigator.of(context).pop(); // Close the dialog
@@ -87,7 +87,7 @@ class Utility {
                 TextButton(
                   child: const Text(
                     'YES',
-                    style: TextStyle(fontSize: 18, color: Color(0xff214183),),
+                    style: TextStyle(fontSize: 22, color: Color(0xff214183),),
                   ),
                   onPressed: () {
                     // Add your OK button action here

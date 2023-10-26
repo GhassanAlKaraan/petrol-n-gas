@@ -91,20 +91,49 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.indigo[700],
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return const CartPage();
-            },
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 14.0, 24.0),
+            child: FloatingActionButton(
+              backgroundColor: Colors.indigo[700],
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const CartPage();
+                    //todo: return the order page.
+                  },
+                ),
+              ),
+              child: const Icon(
+                Icons.shopping_bag,
+                color: Colors.white,
+              ),
+            ),
           ),
-        ),
-        child: const Icon(
-          Icons.shopping_bag,
-          color: Colors.white,
-        ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 14.0, 24.0),
+            child: FloatingActionButton(
+              backgroundColor: Colors.orange,
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const CartPage();
+                  },
+                ),
+              ),
+              child: const Icon(
+                Icons.notes,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

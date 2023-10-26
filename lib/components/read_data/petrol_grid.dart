@@ -108,7 +108,7 @@ class _ProductGridViewState extends State<ProductGridView> {
                       context: context,
                       builder: (context) => AlertDialog(
                               title: Text(
-                                'Choose quantity by Liters',
+                                'Choose quantity',
                                 style: kTxtNormal,
                               ),
                               content: MyTextField(
@@ -126,7 +126,7 @@ class _ProductGridViewState extends State<ProductGridView> {
                                         _quantityController.clear();
                                         Navigator.pop(context);
                                       },
-                                      child: Text('Cancel', style: kTxtBig),
+                                      child: const Text('Cancel', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                                     ),
                                     TextButton(
                                       onPressed: () {
@@ -159,7 +159,7 @@ class _ProductGridViewState extends State<ProductGridView> {
                                         Navigator.pop(context);
                                         Utility.showSnackBar(context, "Done");
                                       },
-                                      child: Text('Add', style: kTxtBig),
+                                      child: const Text('Add', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                                     ),
                                   ],
                                 )
