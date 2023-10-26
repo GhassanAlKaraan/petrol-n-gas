@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:petrol_n_gas/components/read_data/petrol_grid.dart';
+import 'package:petrol_n_gas/components/read_data/product_grid.dart';
 import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
 import 'cart_page.dart';
