@@ -7,20 +7,6 @@ import '../model/cart_model.dart';
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
 
-
-String checkCategory(String category){
-  switch (category) {
-    case "petrol":
-      return "assets/images/petrol.png";
-    case "gas":
-      return "assets/images/gas-cylinder.png";
-    //todo: add accessories.
-    default:
-      return "assets/images/petrol.png";
-  }
-}
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,9 +50,7 @@ String checkCategory(String category){
                               borderRadius: BorderRadius.circular(8)),
                           child: ListTile(
                             leading: Image.asset(
-
-                              // value.cartItems[index].category == "petrol" ? "assets/images/petrol.png" : "assets/images/gas-cylinder.png",
-                              checkCategory(value.cartItems[index].category),
+                              "assets/images/${value.cartItems[index].imageFlag}.png",
                               height: 36,
                             ),
                             title: Text(

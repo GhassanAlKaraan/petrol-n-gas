@@ -1,27 +1,19 @@
+import 'package:petrol_n_gas/model/product_model.dart';
+
 class Order {
-  final String userId; // User's ID
-  final List<OrderItem> items; // List of items in the order
+  final String email;
+  final List<ProductModel> orderProducts; //* collection reference.
   final DateTime orderTime; // * or use Timestamp? Time of the order
-  final double totalAmount; // Total order amount
+  final double totalAmount;
+  final bool approved;
 
   Order({
-    required this.userId,
-    required this.items,
+    required this.email,
+    required this.orderProducts,
     required this.orderTime,
     required this.totalAmount,
+    required this.approved
   });
 }
 
-class OrderItem {
-//* accept a product object instead? no the quantity of order is different from the quantity of product stock
-
-  final String name; // Name of the product
-  final int quantity; // Quantity of the product in the order
-  final double price; // Price of the product
-
-  OrderItem({
-    required this.name,
-    required this.quantity,
-    required this.price,
-  });
-}
+//* OrderItem is ProductModel.

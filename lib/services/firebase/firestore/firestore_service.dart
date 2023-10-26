@@ -32,10 +32,24 @@ class FirestoreService {
 
   /// READ
   Stream<QuerySnapshot> getPetrolProductsStream() {
-    return _products.where('category', isEqualTo: 'petrol').snapshots();
+    return _products
+        .where('category', isEqualTo: 'petrol')
+        .orderBy('name') //you need to create an index in firestore
+        .snapshots();
   }
+
+
   Stream<QuerySnapshot> getGasProductsStream() {
-    return _products.where('category', isEqualTo: 'gas').snapshots();
+    return _products
+        .where('category', isEqualTo: 'gas')
+        .orderBy('name')
+        .snapshots();
+  }
+  Stream<QuerySnapshot> getAccessoryProductsStream() {
+    return _products
+        .where('category', isEqualTo: 'accessory')
+        .orderBy('name')
+        .snapshots();
   }
 
   /// DELETE

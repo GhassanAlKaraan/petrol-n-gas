@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:petrol_n_gas/components/gas_grid.dart';
-import 'package:petrol_n_gas/components/petrol_grid.dart';
+import 'package:petrol_n_gas/components/read_data/petrol_grid.dart';
 import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
 import 'cart_page.dart';
@@ -15,15 +14,15 @@ class TabBarObjects {
 }
 
 final List _tabList = [
-  TabBarObjects(text: "Petrol", icon: Icons.oil_barrel),
-  TabBarObjects(text: "Gas", icon: Icons.oil_barrel_outlined),
-  TabBarObjects(text: "Accessory", icon: Icons.more),
+  TabBarObjects(text: " Petrol", icon: Icons.oil_barrel),
+  TabBarObjects(text: " Gas", icon: Icons.oil_barrel_outlined),
+  TabBarObjects(text: " Accessories", icon: Icons.pin),
 ];
 
 List<Widget> _productList = [
-  const PetrolGridView(),
-  const GasGridView(),
-  const TestingWidget(),
+  const ProductGridView(productCategory: "petrol"),
+  const ProductGridView(productCategory: "gas"),
+  const ProductGridView(productCategory: "accessory"),
 ];
 
 class HomePage extends StatefulWidget {
@@ -93,7 +92,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.indigo[700],
         onPressed: () => Navigator.push(
           context,
           MaterialPageRoute(
@@ -120,7 +119,7 @@ class _HomePageState extends State<HomePage> {
 
           const SizedBox(height: 4),
 
-          // Let's order fresh items for you
+          // Let's order for you
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Text(
@@ -132,14 +131,14 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 8),
 
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.0),
             child: Divider(),
           ),
 
-          const SizedBox(height: 8),
+          //const SizedBox(height: 8),
 
           //* Tab bar
           Padding(
@@ -159,15 +158,13 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          // Expanded(
-          //   child: ProductGridView(),
-          // ),
-
           Expanded(
-              child: PageView(
-            controller: pageController,
-            children: _productList,
-          )),
+            child: PageView(
+              controller: pageController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: _productList,
+            ),
+          ),
         ],
       ),
     );
@@ -186,7 +183,7 @@ class _HomePageState extends State<HomePage> {
       },
       child: AnimatedContainer(
         curve: Curves.linearToEaseOut,
-        width: currentIndex == index1 ? 130 : 50,
+        width: currentIndex == index1 ? 140 : 50,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: currentIndex == index1 ? Colors.indigo : Colors.orange,
@@ -215,16 +212,5 @@ class _HomePageState extends State<HomePage> {
         )),
       ),
     );
-  }
-}
-
-class TestingWidget extends StatelessWidget {
-  const TestingWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text("HELLO"),);
   }
 }
