@@ -39,25 +39,11 @@ class _ProductGridViewState extends State<ProductGridView> {
     super.dispose();
   }
 
-  Stream<QuerySnapshot<Object?>>? chooseStream(
-      FirestoreService firestoreService) {
-    switch (widget.productCategory) {
-      case "petrol":
-        return firestoreService.getPetrolProductsStream();
-      case "gas":
-        return firestoreService.getGasProductsStream();
-      case "accessory":
-        return firestoreService.getAccessoryProductsStream();
-      default:
-        return null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     FirestoreService firestoreService = FirestoreService();
     return StreamBuilder<QuerySnapshot>(
-      stream: chooseStream(firestoreService),
+      stream: firestoreService.getProductsStreamByCategory(widget.productCategory),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(

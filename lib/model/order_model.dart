@@ -1,19 +1,15 @@
 import 'package:petrol_n_gas/model/product_model.dart';
 
-class Order {
+class OrderModel {
   final String email;
-  final List<ProductModel> orderProducts; //* collection reference.
-  final DateTime orderTime; // * or use Timestamp? Time of the order
+  final List<ProductModel> orderProducts;
+  final DateTime orderTime = DateTime.now();
+  final bool approved = false;
   final double totalAmount;
-  final bool approved;
 
-  Order({
-    required this.email,
+  OrderModel({
+    required this.email, // current user email.
     required this.orderProducts,
-    required this.orderTime,
     required this.totalAmount,
-    required this.approved
   });
 }
-
-//* OrderItem is ProductModel.

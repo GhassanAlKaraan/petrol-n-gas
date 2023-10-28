@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:petrol_n_gas/services/firebase/auth/auth_exceptions/auth_exception_handler.dart';
 import 'package:petrol_n_gas/services/firebase/auth/auth_exceptions/auth_results_status.dart';
 import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
@@ -12,7 +13,6 @@ import '../../utility/utils.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  //const LoginPage({super.key, this.onTap});
   const LoginPage({super.key, required this.onTap});
   final void Function()? onTap;
 
@@ -56,8 +56,9 @@ class _LoginPageState extends State<LoginPage> {
         final errorMsg = AuthExceptionHandler.generateExceptionMessage(status);
         Utility.showAlert(context, errorMsg);
       }
-    } catch (e) {
-      print("$e.message");
+    } on FirebaseAuth catch (e) {
+      print("Login Failed");
+      print(e);
     } finally {
       _toggleButtonState();
     }
@@ -70,8 +71,6 @@ class _LoginPageState extends State<LoginPage> {
       isButtonClicked = !isButtonClicked;
     });
   }
-
-  //! add
 
   @override
   Widget build(BuildContext context) {

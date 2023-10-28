@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:petrol_n_gas/utility/utils.dart';
 import 'package:provider/provider.dart';
 
 import '../model/cart_model.dart';
@@ -100,7 +101,8 @@ class CartPage extends StatelessWidget {
                           const SizedBox(height: 8),
                           // total price
                           Text(
-                            '\$${value.calculateTotal()}',
+                            // '\$${value.calculateTotal()}',
+                            '\$${value.calculateTotal().toStringAsFixed(2)}',
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -111,24 +113,34 @@ class CartPage extends StatelessWidget {
                       ),
 
                       // pay now
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.green.shade200),
-                          borderRadius: BorderRadius.circular(28),
-                        ),
-                        padding: const EdgeInsets.all(12),
-                        child: const Row(
-                          children: [
-                            Text(
-                              'Order Now',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              size: 16,
-                              color: Colors.white,
-                            ),
-                          ],
+                      GestureDetector(
+                        onTap: () {
+                          Utility.showAlertDialog(
+                              context,
+                              () =>
+                                  Provider.of<CartModel>(context, listen: false)
+                                      .placeOrder(context),
+                              "Place Order");
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.green.shade200),
+                            borderRadius: BorderRadius.circular(28),
+                          ),
+                          padding: const EdgeInsets.all(12),
+                          child: const Row(
+                            children: [
+                              Text(
+                                'Order Now',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                size: 16,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
