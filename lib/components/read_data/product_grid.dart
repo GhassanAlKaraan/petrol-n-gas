@@ -11,12 +11,10 @@ import 'package:provider/provider.dart';
 
 final List<Color> _colorList = [
   Colors.green,
-  Colors.blue,
-  Colors.red,
-  Colors.yellow,
+  Colors.indigo,
   Colors.purple,
-  Colors.orange
 ];
+
 
 class ProductGridView extends StatefulWidget {
   const ProductGridView({
@@ -86,7 +84,7 @@ class _ProductGridViewState extends State<ProductGridView> {
                 itemName: name,
                 itemPrice: price.toString(),
                 imagePath: 'assets/images/$imageFlag.png',
-                color: _colorList[index % 6],
+                color: _colorList[index % 3],
                 onPressed: () {
                   int newQuantity = 1;
                   double newPrice = 0;
