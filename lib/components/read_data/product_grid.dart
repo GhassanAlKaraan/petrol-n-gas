@@ -84,7 +84,7 @@ class _ProductGridViewState extends State<ProductGridView> {
                 itemName: name,
                 itemPrice: price.toString(),
                 imagePath: 'assets/images/$imageFlag.png',
-                color: _colorList[index % 3],
+                color: _colorList[index % _colorList.length], 
                 onPressed: () {
                   int newQuantity = 1;
                   double newPrice = 0;
