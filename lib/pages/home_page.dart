@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:petrol_n_gas/components/read_data/product_grid.dart';
+import 'package:petrol_n_gas/pages/orders_page.dart';
 import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
 import 'cart_page.dart';
@@ -104,8 +105,8 @@ class _HomePageState extends State<HomePage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
+                    //return const CartPage();
                     return const CartPage();
-                    //todo: return the order page.
                   },
                 ),
               ),
@@ -123,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return const CartPage();
+                    return const OrdersPage();
                   },
                 ),
               ),

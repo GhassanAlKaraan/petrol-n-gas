@@ -61,7 +61,7 @@ class FirestoreService {
 
   //********** Working with Users **********//
 
-  Future<String> getCurrentUserEmail() async{
+  Future<String> getCurrentUserEmail() async {
     User user = FirebaseAuth.instance.currentUser!;
     return user.email!;
   }
@@ -100,10 +100,10 @@ class FirestoreService {
   final CollectionReference _orders =
       FirebaseFirestore.instance.collection("orders");
 
-  final CollectionReference orderItems = FirebaseFirestore.instance
-      .collection("orders")
-      .doc("THPx0mH22xvVit5EbVdu")
-      .collection("orderProducts");
+  // final CollectionReference orderItems = FirebaseFirestore.instance
+  //     .collection("orders")
+  //     .doc("THPx0mH22xvVit5EbVdu")
+  //     .collection("orderProducts");
 
   ///CREATE order
 
@@ -131,14 +131,14 @@ class FirestoreService {
     return "Success";
   }
 
-  ///READ order
-  Future getOrdersByUser(String email) async {
-    QuerySnapshot querySnapshot =
-        await _orders.where('email', isEqualTo: email).get();
-    return querySnapshot.docs;
+  ///READ orders of a user
+  Stream<QuerySnapshot> getOrdersByUserEmail(String email){
+    return _orders
+        .where('email', isEqualTo: email)
+        .orderBy('orderDate') //descending?
+        .snapshots();
   }
 
-  ///UPDATE order
   ///DELETE order
-  ///Get all orders by user
+  
 }
