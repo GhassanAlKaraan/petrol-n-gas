@@ -122,11 +122,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Already a user? ", style: kTxtNSmall),
+                    Text("Already a user? ", style: kTxtSmall),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: Text("Login",
-                          style: kTxtNSmall.copyWith(color: Colors.blue)),
+                          style: kTxtSmall.copyWith(color: Colors.blue)),
                     )
                   ],
                 )

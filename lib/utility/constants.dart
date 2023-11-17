@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-TextStyle kTxtNSmall = GoogleFonts.notoSerif(fontSize: 16);
+TextStyle kTxtSmall = GoogleFonts.notoSerif(fontSize: 16);
 
 TextStyle kTxtNormal = GoogleFonts.notoSerif(fontSize: 18);
 

@@ -12,14 +12,15 @@ class AuthGate extends StatelessWidget {
       body: StreamBuilder(
         // Listen to changes in the authentication state using FirebaseAuth's stream
         stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot){
+        builder: (context, snapshot) {
           // Check if there is data
           //user logged in
-          if(snapshot.hasData){
+          if (snapshot.hasData) {
             return const HomePage();
+            //TODO: IF Admin, go to EditProductsPage()
           }
           //user not logged in
-          else{
+          else {
             return const LoginOrRegister();
           }
         },

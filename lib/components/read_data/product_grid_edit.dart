@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_n_gas/components/my_textfield.dart';
-import 'package:petrol_n_gas/components/product_item_tile.dart';
+import 'package:petrol_n_gas/components/product_item_tile_edit.dart';
 import 'package:petrol_n_gas/model/cart_model.dart';
 import 'package:petrol_n_gas/model/product_model.dart';
 import 'package:petrol_n_gas/services/firebase/firestore/firestore_service.dart';
@@ -9,15 +9,10 @@ import 'package:petrol_n_gas/utility/constants.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
 import 'package:provider/provider.dart';
 
-final List<Color> _colorList = [
-  Colors.green,
-  Colors.indigo,
-  Colors.purple,
-];
 
 
-class ProductGridView extends StatefulWidget {
-  const ProductGridView({
+class ProductGridEdit extends StatefulWidget {
+  const ProductGridEdit({
     super.key,
     required this.productCategory,
   });
@@ -25,12 +20,12 @@ class ProductGridView extends StatefulWidget {
   final String productCategory;
 
   @override
-  State<ProductGridView> createState() => _ProductGridViewState();
+  State<ProductGridEdit> createState() => _ProductGridEditState();
 }
 
-class _ProductGridViewState extends State<ProductGridView> {
+class _ProductGridEditState extends State<ProductGridEdit> {
   final TextEditingController _quantityController = TextEditingController();
-
+  // TODO: Add more controllers
   @override
   void dispose() {
     _quantityController.dispose();
@@ -80,11 +75,11 @@ class _ProductGridViewState extends State<ProductGridView> {
               String imageFlag = ds['imageFlag'];
               String category = ds['category'];
 
-              return ProductItemTile(
+              return ProductItemTileEdit(
                 itemName: name,
                 itemPrice: price.toString(),
                 imagePath: 'assets/images/$imageFlag.png',
-                color: _colorList[index % _colorList.length], 
+                color: Colors.black87, 
                 onPressed: () {
                   int newQuantity = 1;
                   double newPrice = 0;
@@ -97,7 +92,7 @@ class _ProductGridViewState extends State<ProductGridView> {
                               ),
                               content: 
                               
-                              
+                              // TODO: Add text fields here
                               MyTextField(
                                 controller: _quantityController,
                                 isObscure: false,

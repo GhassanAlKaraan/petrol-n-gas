@@ -60,7 +60,7 @@ class CartPage extends StatelessWidget {
                             ),
                             subtitle: Text(
                               // ignore: prefer_interpolation_to_compose_strings
-                              '\$' + value.cartItems[index].price.toString(),
+                              '\$' + value.cartItems[index].price.toStringAsFixed(2),
                               style: const TextStyle(fontSize: 12),
                             ),
                             trailing: IconButton(

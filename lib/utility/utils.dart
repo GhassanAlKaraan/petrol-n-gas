@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:petrol_n_gas/utility/constants.dart';
 
 class Utility {
-
   static void showSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -64,7 +63,7 @@ class Utility {
         return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius:
-            BorderRadius.circular(8.0), // Adjust the radius as needed
+                BorderRadius.circular(8.0), // Adjust the radius as needed
           ),
           title: Text(message),
           content: const Text(
@@ -73,12 +72,15 @@ class Utility {
           ),
           actions: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
                   child: const Text(
                     'Cancel',
-                    style: TextStyle(fontSize: 22, color: Color(0xff214183),),
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Color(0xff214183),
+                    ),
                   ),
                   onPressed: () {
                     Navigator.of(context).pop(); // Close the dialog
@@ -86,8 +88,11 @@ class Utility {
                 ),
                 TextButton(
                   child: const Text(
-                    'YES',
-                    style: TextStyle(fontSize: 22, color: Color(0xff214183),),
+                    'Yes',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Color(0xff214183),
+                    ),
                   ),
                   onPressed: () {
                     // Add your OK button action here
@@ -104,24 +109,6 @@ class Utility {
   }
 
   static void launchPage(BuildContext context, Widget page) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => page));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => page));
   }
-
-  // static void routeTo(BuildContext context, String routeName) {
-  //   Navigator.pushReplacementNamed(context, routeName);
-  // }
-
-  // static void showLoading(BuildContext context) {
-  //   //Show loading animation
-  //   showDialog(
-  //     context: context,
-  //     barrierDismissible: false,
-  //     builder: (context) {
-  //       return const Center(
-  //         child: CircularProgressIndicator(),
-  //       );
-  //     },
-  //   );
-  // }
 }

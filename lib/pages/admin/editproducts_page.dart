@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:petrol_n_gas/components/my_drawer.dart';
-import 'package:petrol_n_gas/components/read_data/product_grid.dart';
-import 'package:petrol_n_gas/pages/orders_page.dart';
+import 'package:petrol_n_gas/components/read_data/product_grid_edit.dart';
 import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
-import 'cart_page.dart';
 
 //tab bat
 class TabBarObjects {
@@ -22,19 +20,19 @@ final List _tabList = [
 ];
 
 List<Widget> _productList = [
-  const ProductGridView(productCategory: "petrol"),
-  const ProductGridView(productCategory: "gas"),
-  const ProductGridView(productCategory: "accessory"),
+  const ProductGridEdit(productCategory: "petrol"),
+  const ProductGridEdit(productCategory: "gas"),
+  const ProductGridEdit(productCategory: "accessory"),
 ];
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class EditProductsPage extends StatefulWidget {
+  const EditProductsPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<EditProductsPage> createState() => _EditProductsPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _EditProductsPageState extends State<EditProductsPage> {
   void _signout() {
     FirebaseAuthHelper().logout();
   }
@@ -55,17 +53,16 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 24.0),
-          child: Builder(
-          builder: (context) {
-            return IconButton(icon: const Icon(Icons.menu),
+          child: Builder(builder: (context) {
+            return IconButton(
+                icon: const Icon(Icons.menu),
                 onPressed: () {
-              Scaffold.of(context).openDrawer();
-            });
-          }
-        ),
+                  Scaffold.of(context).openDrawer();
+                });
+          }),
         ),
         title: Text(
-          'Mecdo Petrol Station',
+          'Admin Control Panel',
           style: TextStyle(
             fontSize: 16,
             color: Colors.grey[700],
@@ -97,87 +94,26 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      
-            drawer: const MyDrawer(),
-      
-      
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 14.0, 24.0),
-            child: FloatingActionButton(
-              backgroundColor: Colors.indigo[700],
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    //return const CartPage();
-                    return const CartPage();
-                  },
-                ),
-              ),
-              child: const Icon(
-                Icons.shopping_bag,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 14.0, 24.0),
-            child: FloatingActionButton(
-              backgroundColor: Colors.orange,
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const OrdersPage();
-                  },
-                ),
-              ),
-              child: const Icon(
-                Icons.notes,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
+      drawer: const MyDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 32),
-
-          // good morning bro
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.0),
-            child: Text('Good morning,'),
-          ),
-
-          const SizedBox(height: 4),
-
-          // Let's order for you
+          const SizedBox(height: 22),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Text(
-              "Let's order for you",
+              "Edit Products",
               style: GoogleFonts.notoSerif(
-                fontSize: 32,
+                fontSize: 26,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
 
-          const SizedBox(height: 8),
-
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.0),
             child: Divider(),
           ),
-
-          //const SizedBox(height: 8),
 
           //* Tab bar
           Padding(
@@ -196,7 +132,7 @@ class _HomePageState extends State<HomePage> {
                   }),
             ),
           ),
-
+          //* Page view
           Expanded(
             child: PageView(
               controller: pageController,
@@ -225,7 +161,7 @@ class _HomePageState extends State<HomePage> {
         width: currentIndex == index1 ? 140 : 50,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: currentIndex == index1 ? Colors.indigo : Colors.orange,
+          color: currentIndex == index1 ? Colors.blue : Colors.black87,
         ),
         duration: const Duration(milliseconds: 200),
         child: Center(

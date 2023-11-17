@@ -109,11 +109,11 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Don't have an account? ", style: kTxtNSmall),
+                    Text("Don't have an account? ", style: kTxtSmall),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: Text("Register",
-                          style: kTxtNSmall.copyWith(color: Colors.blue)),
+                          style: kTxtSmall.copyWith(color: Colors.blue)),
                     )
                   ],
                 )
