@@ -91,6 +91,10 @@ class _ProductGridViewState extends State<ProductGridView> {
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
+                        shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    8.0), // Adjust the radius as needed
+                              ),
                               title: Text(
                                 'Choose quantity',
                                 style: kTxtNormal,
@@ -106,7 +110,7 @@ class _ProductGridViewState extends State<ProductGridView> {
                               actions: [
                                 Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     TextButton(
                                       onPressed: () {

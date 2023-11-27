@@ -1,15 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:petrol_n_gas/components/imageflag_dropdown.dart';
 import 'package:petrol_n_gas/components/my_textfield.dart';
 import 'package:petrol_n_gas/components/product_item_tile_edit.dart';
-import 'package:petrol_n_gas/model/cart_model.dart';
 import 'package:petrol_n_gas/model/product_model.dart';
 import 'package:petrol_n_gas/services/firebase/firestore/firestore_service.dart';
 import 'package:petrol_n_gas/utility/constants.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
-import 'package:provider/provider.dart';
-
-
 
 class ProductGridEdit extends StatefulWidget {
   const ProductGridEdit({
@@ -25,18 +22,22 @@ class ProductGridEdit extends StatefulWidget {
 
 class _ProductGridEditState extends State<ProductGridEdit> {
   final TextEditingController _quantityController = TextEditingController();
-  // TODO: Add more controllers
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  String? _selectedImageFlag;
   @override
   void dispose() {
     _quantityController.dispose();
     super.dispose();
   }
 
+  //TODO: implement the loading button method
   @override
   Widget build(BuildContext context) {
     FirestoreService firestoreService = FirestoreService();
     return StreamBuilder<QuerySnapshot>(
-      stream: firestoreService.getProductsStreamByCategory(widget.productCategory),
+      stream:
+          firestoreService.getProductsStreamByCategory(widget.productCategory),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(
@@ -68,80 +69,140 @@ class _ProductGridEditState extends State<ProductGridEdit> {
             ),
             itemBuilder: (context, index) {
               DocumentSnapshot ds = docs[index];
-              // String docId = ds.id;
+              String docId = ds.id; // TODO: use docId to update the product
               String name = ds['name'];
               double price = ds['price'].toDouble();
               int quantity = ds['quantity'];
               String imageFlag = ds['imageFlag'];
               String category = ds['category'];
-
               return ProductItemTileEdit(
                 itemName: name,
                 itemPrice: price.toString(),
                 imagePath: 'assets/images/$imageFlag.png',
-                color: Colors.black87, 
+                color: Colors.black87,
                 onPressed: () {
+                  //populate editing text fields
+                  _nameController.text = name;
+                  _priceController.text = price.toString();
+                  _quantityController.text = quantity.toString();
+                  _selectedImageFlag = imageFlag;
+
+                  //new vars
                   int newQuantity = 1;
                   double newPrice = 0;
+                  String newName = '';
+                  String newImageFlag = '';
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                              title: Text(
-                                'Choose quantity',
-                                style: kTxtNormal,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    8.0), // Adjust the radius as needed
                               ),
-                              content: 
-                              
-                              // TODO: Add text fields here
-                              MyTextField(
-                                controller: _quantityController,
-                                isObscure: false,
-                                labelText: widget.productCategory == "petrol"? "$quantity Liters available.": "$quantity available.",
+                              title: Text(
+                                'Edit Product',
+                                style: kTxtBig,
+                              ),
+                              content: ConstrainedBox(
+                                constraints:
+                                    const BoxConstraints(maxHeight: 400),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Divider(thickness: 2,),
+                                    const SizedBox(height: 20),
+                                    Text(
+                                      "Category: $category",
+                                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(height: 22),
+                                    MyTextField(
+                                        isObscure: false,
+                                        controller: _nameController,
+                                        labelText: "Product Name"),
+                                    const SizedBox(height: 20),
+                                    MyTextField(
+                                        isObscure: false,
+                                        controller: _priceController,
+                                        labelText: "Price"),
+                                    const SizedBox(height: 20),
+                                    MyTextField(
+                                        controller: _quantityController,
+                                        isObscure: false,
+                                        labelText: "Quantity"),
+                                    const SizedBox(height: 20),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text(
+                                          "Image Flag:",
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                        ImageFlagDropDown(
+                                          category: category,
+                                          selectedVal: _selectedImageFlag,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                               actions: [
                                 Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     TextButton(
                                       onPressed: () {
+                                        _nameController.clear();
+                                        _priceController.clear();
                                         _quantityController.clear();
                                         Navigator.pop(context);
                                       },
-                                      child: const Text('Cancel', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                      child: const Text('Cancel',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold)),
                                     ),
                                     TextButton(
                                       onPressed: () {
                                         newQuantity =
                                             int.parse(_quantityController.text);
+                                        newPrice =
+                                            double.parse(_priceController.text);
+                                        newName =
+                                            _nameController.text.toString();
+                                        newImageFlag =
+                                            SelectedValueHolder.selectedValue!;
 
-                                        newPrice = newQuantity * price;
-
-                                        if (newQuantity > quantity) {
-                                          Utility.showSnackBar(context,
-                                              "Not enough quantity available.");
-                                          return;
-                                        }
+//! TODO: add validation to text fields input.
                                         if (newQuantity <= 0) {
                                           Utility.showSnackBar(
                                               context, "Invalid quantity.");
                                           return;
                                         }
+
                                         final ProductModel product =
                                             ProductModel(
-                                                name: name,
+                                                name: newName,
                                                 price: newPrice,
                                                 quantity: newQuantity,
-                                                imageFlag: imageFlag,
+                                                imageFlag: newImageFlag,
                                                 category: category);
-                                        Provider.of<CartModel>(context,
-                                                listen: false)
-                                            .addProductToCart(product);
+
+//! TODO: Implement Firestore UPDATE Method
+
+                                        _nameController.clear();
+                                        _priceController.clear();
                                         _quantityController.clear();
                                         Navigator.pop(context);
                                         Utility.showSnackBar(context, "Done");
                                       },
-                                      child: const Text('Add', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                      child: const Text('Update',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold)),
                                     ),
                                   ],
                                 )
