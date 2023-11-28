@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:petrol_n_gas/components/category_dropdown.dart';
+import 'package:petrol_n_gas/components/imageflag_dropdown_2.dart';
 import 'package:petrol_n_gas/components/my_drawer.dart';
+import 'package:petrol_n_gas/components/my_textfield.dart';
 import 'package:petrol_n_gas/components/read_data/product_grid_edit.dart';
+import 'package:petrol_n_gas/model/product_model.dart';
 import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
+import 'package:petrol_n_gas/services/firebase/firestore/firestore_service.dart';
+import 'package:petrol_n_gas/utility/constants.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
 
 //tab bat
@@ -33,6 +39,12 @@ class EditProductsPage extends StatefulWidget {
 }
 
 class _EditProductsPageState extends State<EditProductsPage> {
+  // String? _selectedCategory;
+  final TextEditingController _quantityController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  // String? _selectedImageFlag;
+
   void _signout() {
     FirebaseAuthHelper().logout();
   }
@@ -41,6 +53,7 @@ class _EditProductsPageState extends State<EditProductsPage> {
 
   @override
   Widget build(BuildContext context) {
+    FirestoreService firestoreService = FirestoreService();
     final PageController pageController = PageController(initialPage: 0);
     void goToPage(int index) {
       pageController.animateToPage(index,
@@ -95,6 +108,161 @@ class _EditProductsPageState extends State<EditProductsPage> {
         ],
       ),
       drawer: const MyDrawer(),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
+        onPressed: () {
+          //new vars
+          String newCategory = '';
+          int newQuantity = 1;
+          double newPrice = 0;
+          String newName = '';
+          String newImageFlag = '';
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              8.0), // Adjust the radius as needed
+                          ),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Create new Product',
+                            style: kTxtBig,
+                          ),
+                        ],
+                      ),
+                      content: ConstrainedBox(
+                        constraints: const BoxConstraints(maxHeight: 450),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Divider(
+                                thickness: 2,
+                              ),
+                              const SizedBox(height: 20),
+                              const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Category:",
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                    CategoryDropDown(),
+                                  ]),
+                              const SizedBox(height: 22),
+                              MyTextField(
+                                  isObscure: false,
+                                  controller: _nameController,
+                                  labelText: "Product Name"),
+                              const SizedBox(height: 20),
+                              MyTextField(
+                                  isObscure: false,
+                                  controller: _priceController,
+                                  labelText: "Price"),
+                              const SizedBox(height: 20),
+                              MyTextField(
+                                  controller: _quantityController,
+                                  isObscure: false,
+                                  labelText: "Quantity"),
+                              const SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    "Image Flag:",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+
+                                  //! possible bug
+                                  ImageFlagDropDown2(
+                                      category: SelectedCategoryHolder
+                                          .selectedValue),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      actions: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                _nameController.clear();
+                                _priceController.clear();
+                                _quantityController.clear();
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Cancel',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                //_toggleButtonState();
+                                try {
+                                  newCategory =
+                                      SelectedCategoryHolder.selectedValue;
+                                  newQuantity =
+                                      int.parse(_quantityController.text);
+                                  newPrice =
+                                      double.parse(_priceController.text);
+                                  newName = _nameController.text.toString();
+                                  newImageFlag =
+                                      SelectedValue2Holder.selectedValue!;
+                                } catch (e) {
+                                  print("Input format error");
+                                  //_toggleButtonState();
+                                  return;
+                                }
+
+                                if (newQuantity <= 0 ||
+                                    newPrice <= 0 ||
+                                    newName.isEmpty) {
+                                  Utility.showSnackBar(
+                                      context, "Invalid input");
+                                  //_toggleButtonState();
+                                  return;
+                                }
+
+                                try {
+                                  final ProductModel product = ProductModel(
+                                      name: newName,
+                                      price: newPrice,
+                                      quantity: newQuantity,
+                                      imageFlag: newImageFlag,
+                                      category: newCategory);
+                                  await firestoreService.createProduct(product);
+                                  Utility.showSnackBar(context, "Done");
+                                } catch (e) {
+                                  Utility.showSnackBar(
+                                      context, "Error updating the product");
+                                } finally {
+                                  //_toggleButtonState();
+                                  _nameController.clear();
+                                  _priceController.clear();
+                                  _quantityController.clear();
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: const Text('Create',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          ],
+                        )
+                      ]));
+        },
+        child: const Icon(Icons.add, size: 30, color: Colors.white,),
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

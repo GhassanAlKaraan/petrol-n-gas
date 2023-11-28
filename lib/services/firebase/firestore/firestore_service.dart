@@ -7,31 +7,32 @@ import 'package:petrol_n_gas/model/product_model.dart';
 import 'package:petrol_n_gas/model/user_model.dart';
 
 class FirestoreService {
+
   //********** Working with Products/Orders **********//
 
   final CollectionReference _products =
       FirebaseFirestore.instance.collection('products');
 
   /// CREATE
-  // Future<void> createEvent(EventModel event) async {
-  //   return await _events
-  //       .add(event.toMap())
-  //       .then((value) => print("Event Added"))
-  //       .catchError((_) {
-  //     print("Could not add Event");
-  //   });
-  // }
+  Future<void> createProduct(ProductModel product) async {
+    return await _products
+        .add(product.toMap())
+        .then((value) => print("Product Added"))
+        .catchError((_) {
+      print("Could not add Product");
+    });
+  }
 
   ///UPDATE
-  // Future<void> updateEvent(String docId, EventModel event) async {
-  //   return await _events
-  //       .doc(docId)
-  //       .update(event.toMap())
-  //       .then((value) => print("Event Updated"))
-  //       .catchError((_) {
-  //     print("Could not update note");
-  //   });
-  // }
+  Future<void> updateProduct(String docId, ProductModel product) async {
+    return await _products
+        .doc(docId)
+        .update(product.toMap())
+        .then((value) => print("Product Updated"))
+        .catchError((_) {
+      print("Could not update product");
+    });
+  }
 
   /// READ
   Stream<QuerySnapshot> getProductsStreamByCategory(String category) {
@@ -42,15 +43,15 @@ class FirestoreService {
   }
 
   /// DELETE
-  // Future<void> deleteEvent(String docId) async {
-  //   return await _events
-  //       .doc(docId)
-  //       .delete()
-  //       .then((value) => print("Event Deleted"))
-  //       .catchError((_) {
-  //     print("Could not delete event");
-  //   });
-  // }
+  Future<void> deleteProduct(String docId) async {
+    return await _products
+        .doc(docId)
+        .delete()
+        .then((value) => print("Event Deleted"))
+        .catchError((_) {
+      print("Could not delete event");
+    });
+  }
 
   ///Get a single event
   // Future<Map<String, dynamic>> getEventById(String docId) async {
@@ -81,7 +82,9 @@ class FirestoreService {
     });
   }
 
-  ///READ user : Not in use.
+  ///READ user
+  //TODO: Use it to give proper access
+
   // Future<Map<String, dynamic>> getUserByEmail(String email) async {
   //   DocumentSnapshot ds = await _users.doc(email).get();
   //   try {
@@ -100,13 +103,7 @@ class FirestoreService {
   final CollectionReference _orders =
       FirebaseFirestore.instance.collection("orders");
 
-  // final CollectionReference orderItems = FirebaseFirestore.instance
-  //     .collection("orders")
-  //     .doc("THPx0mH22xvVit5EbVdu")
-  //     .collection("orderProducts");
-
   ///CREATE order
-
   Future<String?> createOrder(OrderModel order) async {
     var result = await _orders.add({
       'email': order.email,
@@ -119,7 +116,7 @@ class FirestoreService {
 
     return "Success";
   }
-
+  ///CREATE ORDER, products list
   Future<String?> createOrderProducts(OrderModel order, String? docId) async {
     CollectionReference orderProductsCollection =
         _orders.doc(docId).collection("orderProducts");
@@ -140,5 +137,7 @@ class FirestoreService {
   }
 
   ///DELETE order
-  
+  // TODO: remove order of a specific user?
+
+
 }

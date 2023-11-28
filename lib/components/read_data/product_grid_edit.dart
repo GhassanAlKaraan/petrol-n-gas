@@ -31,7 +31,14 @@ class _ProductGridEditState extends State<ProductGridEdit> {
     super.dispose();
   }
 
-  //TODO: implement the loading button method
+  // bool isButtonClicked = false;
+
+  // void _toggleButtonState() {
+  //   setState(() {
+  //     isButtonClicked = !isButtonClicked;
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     FirestoreService firestoreService = FirestoreService();
@@ -69,7 +76,7 @@ class _ProductGridEditState extends State<ProductGridEdit> {
             ),
             itemBuilder: (context, index) {
               DocumentSnapshot ds = docs[index];
-              String docId = ds.id; // TODO: use docId to update the product
+              String docId = ds.id;
               String name = ds['name'];
               double price = ds['price'].toDouble();
               int quantity = ds['quantity'];
@@ -99,53 +106,88 @@ class _ProductGridEditState extends State<ProductGridEdit> {
                                 borderRadius: BorderRadius.circular(
                                     8.0), // Adjust the radius as needed
                               ),
-                              title: Text(
-                                'Edit Product',
-                                style: kTxtBig,
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Manage Product',
+                                    style: kTxtBig,
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        Utility.showAlertDialog(context,
+                                            () async {
+                                          try {
+                                            await firestoreService
+                                                .deleteProduct(docId);
+                                            Utility.showSnackBar(
+                                                context, "Product Deleted");
+                                          } catch (e) {
+                                            Utility.showSnackBar(context,
+                                                "Error deleting product");
+                                          } finally {
+                                            Navigator.of(context).pop();
+                                          }
+                                        }, "Delete Product");
+                                      },
+                                      icon: const Icon(
+                                        Icons.delete_outline,
+                                        color: Colors.black,
+                                        size: 25,
+                                      )),
+                                ],
                               ),
                               content: ConstrainedBox(
                                 constraints:
                                     const BoxConstraints(maxHeight: 400),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Divider(thickness: 2,),
-                                    const SizedBox(height: 20),
-                                    Text(
-                                      "Category: $category",
-                                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(height: 22),
-                                    MyTextField(
-                                        isObscure: false,
-                                        controller: _nameController,
-                                        labelText: "Product Name"),
-                                    const SizedBox(height: 20),
-                                    MyTextField(
-                                        isObscure: false,
-                                        controller: _priceController,
-                                        labelText: "Price"),
-                                    const SizedBox(height: 20),
-                                    MyTextField(
-                                        controller: _quantityController,
-                                        isObscure: false,
-                                        labelText: "Quantity"),
-                                    const SizedBox(height: 20),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Text(
-                                          "Image Flag:",
-                                          style: TextStyle(fontSize: 20),
-                                        ),
-                                        ImageFlagDropDown(
-                                          category: category,
-                                          selectedVal: _selectedImageFlag,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Divider(
+                                        thickness: 2,
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Text(
+                                        "Category: $category",
+                                        style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(height: 22),
+                                      MyTextField(
+                                          isObscure: false,
+                                          controller: _nameController,
+                                          labelText: "Product Name"),
+                                      const SizedBox(height: 20),
+                                      MyTextField(
+                                          isObscure: false,
+                                          controller: _priceController,
+                                          labelText: "Price"),
+                                      const SizedBox(height: 20),
+                                      MyTextField(
+                                          controller: _quantityController,
+                                          isObscure: false,
+                                          labelText: "Quantity"),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text(
+                                            "Image Flag:",
+                                            style: TextStyle(fontSize: 20),
+                                          ),
+                                          ImageFlagDropDown(
+                                            category: category,
+                                            selectedVal: _selectedImageFlag,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               actions: [
@@ -166,38 +208,52 @@ class _ProductGridEditState extends State<ProductGridEdit> {
                                               fontWeight: FontWeight.bold)),
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        newQuantity =
-                                            int.parse(_quantityController.text);
-                                        newPrice =
-                                            double.parse(_priceController.text);
-                                        newName =
-                                            _nameController.text.toString();
-                                        newImageFlag =
-                                            SelectedValueHolder.selectedValue!;
-
-//! TODO: add validation to text fields input.
-                                        if (newQuantity <= 0) {
+                                      onPressed: () async {
+                                        //_toggleButtonState();
+                                        try {
+                                          newQuantity = int.parse(
+                                              _quantityController.text);
+                                          newPrice = double.parse(
+                                              _priceController.text);
+                                          newName =
+                                              _nameController.text.toString();
+                                          newImageFlag = SelectedValueHolder
+                                              .selectedValue!;
+                                        } catch (e) {
+                                          print("Input format error");
+                                          //_toggleButtonState();
+                                          return;
+                                        }
+                                        if (newQuantity <= 0 ||
+                                            newPrice <= 0 ||
+                                            newName.isEmpty) {
                                           Utility.showSnackBar(
-                                              context, "Invalid quantity.");
+                                              context, "Invalid input");
+                                          //_toggleButtonState();
                                           return;
                                         }
 
-                                        final ProductModel product =
-                                            ProductModel(
-                                                name: newName,
-                                                price: newPrice,
-                                                quantity: newQuantity,
-                                                imageFlag: newImageFlag,
-                                                category: category);
-
-//! TODO: Implement Firestore UPDATE Method
-
-                                        _nameController.clear();
-                                        _priceController.clear();
-                                        _quantityController.clear();
-                                        Navigator.pop(context);
-                                        Utility.showSnackBar(context, "Done");
+                                        try {
+                                          final ProductModel product =
+                                              ProductModel(
+                                                  name: newName,
+                                                  price: newPrice,
+                                                  quantity: newQuantity,
+                                                  imageFlag: newImageFlag,
+                                                  category: category);
+                                          await firestoreService.updateProduct(
+                                              docId, product);
+                                          Utility.showSnackBar(context, "Done");
+                                        } catch (e) {
+                                          Utility.showSnackBar(context,
+                                              "Error updating the product");
+                                        } finally {
+                                          //_toggleButtonState();
+                                          _nameController.clear();
+                                          _priceController.clear();
+                                          _quantityController.clear();
+                                          Navigator.pop(context);
+                                        }
                                       },
                                       child: const Text('Update',
                                           style: TextStyle(
