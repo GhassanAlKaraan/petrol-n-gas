@@ -62,6 +62,7 @@ class FirestoreService {
 
   //********** Working with Users **********//
 
+  // Firebase Auth Current Email
   Future<String> getCurrentUserEmail() async {
     User user = FirebaseAuth.instance.currentUser!;
     return user.email!;
@@ -85,17 +86,17 @@ class FirestoreService {
   ///READ user
   //TODO: Use it to give proper access
 
-  // Future<Map<String, dynamic>> getUserByEmail(String email) async {
-  //   DocumentSnapshot ds = await _users.doc(email).get();
-  //   try {
-  //     final Map<String, dynamic> data = ds.data() as Map<String, dynamic>;
-  //     return data;
-  //   } catch (e) {
-  //     // In case the data in firestore is badly formatted
-  //     print(e);
-  //     return {};
-  //   }
-  // }
+  Future<Map<String, dynamic>> getUserByEmail(String email) async {
+    DocumentSnapshot ds = await _users.doc(email).get();
+    try {
+      final Map<String, dynamic> data = ds.data() as Map<String, dynamic>;
+      return data;
+    } catch (e) {
+      // In case the data in firestore is badly formatted
+      print(e);
+      return {};
+    }
+  }
 
   //********* Working with Orders *********//
 

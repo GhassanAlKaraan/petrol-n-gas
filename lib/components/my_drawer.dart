@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petrol_n_gas/pages/admin/editproducts_page.dart';
+import 'package:petrol_n_gas/pages/edit_profile.dart';
 import 'package:petrol_n_gas/pages/home_page.dart';
 import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
@@ -87,8 +88,7 @@ class MyDrawer extends StatelessWidget {
                   title: const Text('Profile', style: TextStyle(fontSize: 18)),
                   onTap: () {
                     Navigator.pop(context);
-                    Utility.showSnackBar(context, "Feature is not ready yet");
-                    // Handle the tap event for Settings
+                    Utility.launchPage(context, EditProfilePage());
                   },
                 ),
                 ListTile(
