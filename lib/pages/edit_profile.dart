@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_n_gas/components/loading_button.dart';
@@ -73,7 +75,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     } finally {
       _toggleButtonState();
     }
-    Utility.launchPage(context, HomePage());
+    Utility.launchPage(context, const HomePage());
     //Navigator.of(context).pop(); // This won't rebuild the homepage.
   }
 

@@ -88,7 +88,7 @@ class MyDrawer extends StatelessWidget {
                   title: const Text('Profile', style: TextStyle(fontSize: 18)),
                   onTap: () {
                     Navigator.pop(context);
-                    Utility.launchPage(context, EditProfilePage());
+                    Utility.launchPage(context, const EditProfilePage());
                   },
                 ),
                 ListTile(
