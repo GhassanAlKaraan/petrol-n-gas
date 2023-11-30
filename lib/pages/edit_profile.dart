@@ -1,27 +1,50 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:petrol_n_gas/components/loading_button.dart';
+import 'package:petrol_n_gas/components/my_button.dart';
+import 'package:petrol_n_gas/components/my_textfield.dart';
+import 'package:petrol_n_gas/pages/home_page.dart';
 import 'package:petrol_n_gas/services/firebase/firestore/firestore_service.dart';
+import 'package:petrol_n_gas/utility/constants.dart';
+import 'package:petrol_n_gas/utility/utils.dart';
 
 // ignore: must_be_immutable
 class EditProfilePage extends StatefulWidget {
-  EditProfilePage({super.key});
+  const EditProfilePage({super.key});
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  String? currentUserName; // TODO: always null not sure why, to be checked
-
+  String? currentUserName; // for loading on init.
+  TextEditingController userNameController = TextEditingController();
   @override
   void initState() {
     super.initState();
     _getUserName();
   }
 
+  @override
+  void dispose() {
+    userNameController.dispose();
+    super.dispose();
+  }
+
   FirestoreService firestoreService = FirestoreService();
 
-  _getUserData() {
-    return firestoreService.getUserByEmail;
+  Future<String> _getCurrentUserEmail() async {
+    try {
+      return await firestoreService.getCurrentUserEmail();
+    } catch (e) {
+      print("Could not get current email address");
+      return "";
+    }
+  }
+
+  _getUserData() async {
+    String emailAddress = await _getCurrentUserEmail();
+    return firestoreService.getUserByEmail(emailAddress);
   }
 
   _getUserName() async {
@@ -29,18 +52,86 @@ class _EditProfilePageState extends State<EditProfilePage> {
     String userName = data['name'];
     setState(() {
       currentUserName = userName;
+      userNameController.text = userName;
+    });
+  }
+
+  _updateUserName(String userName) async {
+    _toggleButtonState();
+    String emailAddress = await _getCurrentUserEmail();
+    if (userNameController.text.isEmpty) {
+      Utility.showAlert(context, "User name is empty");
+      _toggleButtonState();
+      return;
+    }
+    try {
+      firestoreService.updateUserName(emailAddress.trim(), userName);
+      Utility.showSnackBar(context, "Done");
+    } on FirebaseFirestore catch (e) {
+      Utility.showSnackBar(context, "Failed to update user name");
+      print(e);
+    } finally {
+      _toggleButtonState();
+    }
+    Utility.launchPage(context, HomePage());
+    //Navigator.of(context).pop(); // This won't rebuild the homepage.
+  }
+
+  _saveData({required String userName}) {
+    _updateUserName(userName);
+  }
+
+  bool isButtonClicked = false;
+
+  void _toggleButtonState() {
+    setState(() {
+      isButtonClicked = !isButtonClicked;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Edit Profile")),
-      body: Center(
-        child: currentUserName == null
-            ? const SizedBox(height: 20, child: CircularProgressIndicator())
-            : Text(currentUserName!.toString()),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          "Edit Profile",
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey[700],
+          ),
+        ),
       ),
+      body: Center(
+          child: Padding(
+        padding: const EdgeInsets.all(14.0),
+        child: currentUserName == null
+            ? const Center(
+                child: SizedBox(
+                    width: 40, height: 40, child: CircularProgressIndicator()),
+              )
+            : Column(
+                children: [
+                  Text(
+                    "User Name",
+                    style: kTxtBig,
+                  ),
+                  const SizedBox(height: 20),
+                  MyTextField(
+                      isObscure: false,
+                      controller: userNameController,
+                      labelText: ""),
+                  const SizedBox(height: 50),
+                  isButtonClicked
+                      ? const LoadingButton(text: "Wait")
+                      : MyButton(
+                          text: "Save",
+                          onTap: () =>
+                              _saveData(userName: userNameController.text))
+                ],
+              ),
+      )),
     );
   }
 }

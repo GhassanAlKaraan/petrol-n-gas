@@ -121,9 +121,9 @@ class _EditProductsPageState extends State<EditProductsPage> {
               context: context,
               builder: (context) => AlertDialog(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              8.0), // Adjust the radius as needed
-                          ),
+                        borderRadius: BorderRadius.circular(
+                            8.0), // Adjust the radius as needed
+                      ),
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -151,6 +151,7 @@ class _EditProductsPageState extends State<EditProductsPage> {
                                       "Category:",
                                       style: TextStyle(fontSize: 20),
                                     ),
+// TODO: take it from the category page instead
                                     CategoryDropDown(),
                                   ]),
                               const SizedBox(height: 22),
@@ -178,10 +179,11 @@ class _EditProductsPageState extends State<EditProductsPage> {
                                     style: TextStyle(fontSize: 20),
                                   ),
 
-                                  //! possible bug
+//! ISSUE, it should take the category
+//TODO: Add new product based on the page category that is in front of user.
                                   ImageFlagDropDown2(
-                                      category: SelectedCategoryHolder
-                                          .selectedValue),
+                                      category:
+                                          SelectedCategoryHolder.selectedValue),
                                 ],
                               ),
                             ],
@@ -261,7 +263,11 @@ class _EditProductsPageState extends State<EditProductsPage> {
                         )
                       ]));
         },
-        child: const Icon(Icons.add, size: 30, color: Colors.white,),
+        child: const Icon(
+          Icons.add,
+          size: 30,
+          color: Colors.white,
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

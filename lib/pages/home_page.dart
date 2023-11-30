@@ -4,6 +4,7 @@ import 'package:petrol_n_gas/components/my_drawer.dart';
 import 'package:petrol_n_gas/components/read_data/product_grid.dart';
 import 'package:petrol_n_gas/pages/orders_page.dart';
 import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
+import 'package:petrol_n_gas/services/firebase/firestore/firestore_service.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
 import 'cart_page.dart';
 
@@ -40,6 +41,36 @@ class _HomePageState extends State<HomePage> {
   }
 
   int currentIndex = 0;
+  String currentUserName = " ";
+  FirestoreService firestoreService = FirestoreService();
+
+  Future<String> _getCurrentUserEmail() async {
+    try {
+      return await firestoreService.getCurrentUserEmail();
+    } catch (e) {
+      print("Could not get current email address");
+      return "";
+    }
+  }
+
+  _getUserData() async {
+    String emailAddress = await _getCurrentUserEmail();
+    return firestoreService.getUserByEmail(emailAddress);
+  }
+
+  _getUserName() async {
+    Map<String, dynamic> data = await _getUserData();
+    String userName = data['name'];
+    setState(() {
+      currentUserName = userName;
+    });
+  }
+
+  @override
+  void initState() {
+    _getUserName();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +86,13 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 24.0),
-          child: Builder(
-          builder: (context) {
-            return IconButton(icon: const Icon(Icons.menu),
+          child: Builder(builder: (context) {
+            return IconButton(
+                icon: const Icon(Icons.menu),
                 onPressed: () {
-              Scaffold.of(context).openDrawer();
-            });
-          }
-        ),
+                  Scaffold.of(context).openDrawer();
+                });
+          }),
         ),
         title: Text(
           'Mecdo Petrol Station',
@@ -97,10 +127,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      
-            drawer: const MyDrawer(),
-      
-      
+      drawer: const MyDrawer(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -151,9 +178,9 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(height: 32),
 
           // good morning bro
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.0),
-            child: Text('Good morning,'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Text('Good morning, $currentUserName'),
           ),
 
           const SizedBox(height: 4),

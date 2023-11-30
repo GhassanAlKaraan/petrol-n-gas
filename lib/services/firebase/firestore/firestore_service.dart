@@ -7,7 +7,6 @@ import 'package:petrol_n_gas/model/product_model.dart';
 import 'package:petrol_n_gas/model/user_model.dart';
 
 class FirestoreService {
-
   //********** Working with Products/Orders **********//
 
   final CollectionReference _products =
@@ -98,6 +97,18 @@ class FirestoreService {
     }
   }
 
+  ///UPDATE User
+  Future<void> updateUserName(String docId, String userName) async {
+    
+    return await _users
+        .doc(docId)
+        .update({'name': userName})
+        .then((value) => print("User Name Updated"))
+        .catchError((_) {
+          print("Could not update User Name");
+        });
+  }
+
   //********* Working with Orders *********//
 
   ///Orders collection
@@ -117,6 +128,7 @@ class FirestoreService {
 
     return "Success";
   }
+
   ///CREATE ORDER, products list
   Future<String?> createOrderProducts(OrderModel order, String? docId) async {
     CollectionReference orderProductsCollection =
@@ -130,7 +142,7 @@ class FirestoreService {
   }
 
   ///READ orders of a user
-  Stream<QuerySnapshot> getOrdersByUserEmail(String email){
+  Stream<QuerySnapshot> getOrdersByUserEmail(String email) {
     return _orders
         .where('email', isEqualTo: email)
         .orderBy('orderDate') //descending?
@@ -139,6 +151,4 @@ class FirestoreService {
 
   ///DELETE order
   // TODO: remove order of a specific user?
-
-
 }
