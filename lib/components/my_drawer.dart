@@ -94,8 +94,8 @@ class MyDrawer extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.logout),
                   title: const Text('Sign Out', style: TextStyle(fontSize: 18)),
-                  onTap: () =>
-                      Utility.showAlertDialog(context, _signout, "Sign Out"),
+                  onTap: () => Utility.showAlertDialog(
+                      context, _signout, "Sign Out"),
                 ),
               ],
             ),
