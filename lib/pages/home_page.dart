@@ -44,6 +44,7 @@ class _HomePageState extends State<HomePage> {
 
   int currentIndex = 0;
   String currentUserName = " ";
+  String userRole = "";
   FirestoreService firestoreService = FirestoreService();
 
   Future<String> _getCurrentUserEmail() async {
@@ -68,9 +69,18 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  _getUserRole() async {
+    Map<String, dynamic> data = await _getUserData();
+    String newUserRole = data['role'];
+    setState(() {
+      userRole = newUserRole;
+    });
+  }
+
   @override
   void initState() {
     _getUserName();
+    _getUserRole();
     super.initState();
   }
 
@@ -129,7 +139,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      drawer: const MyDrawer(),
+      drawer: MyDrawer(userRole: userRole),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -251,7 +261,7 @@ class _HomePageState extends State<HomePage> {
       },
       child: AnimatedContainer(
         curve: Curves.linearToEaseOut,
-        width: currentIndex == index1 ? 140 : 50,
+        width: currentIndex == index1 ? 160 : 50,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: currentIndex == index1 ? Colors.indigo : Colors.orange,

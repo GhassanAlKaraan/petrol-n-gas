@@ -1,0 +1,20 @@
+DONE 1. Change the create product functionality
+- Fix the Alert Dialog
+
+
+2. Make the approve orders page
+- Create the page
+- Create the update order firestore function
+
+
+3. Change Auth Gate to redirect admin to Edit Products page
+- Fix the AuthGate
+- Create the firestore function to get role *
+
+
+4. Also change the access on the drawer
+- Fix the Drawer
+- Create the firestore function to get role *
+
+
+5. Testing and Fixes

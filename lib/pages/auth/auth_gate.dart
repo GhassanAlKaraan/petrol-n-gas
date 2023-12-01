@@ -3,8 +3,48 @@ import 'package:flutter/material.dart';
 import 'package:petrol_n_gas/pages/auth/login_or_register.dart';
 import '../../../pages/home_page.dart';
 
-class AuthGate extends StatelessWidget {
-  const AuthGate({Key? key}) : super(key: key);
+class AuthGate extends StatefulWidget {
+  AuthGate({Key? key}) : super(key: key);
+
+  @override
+  State<AuthGate> createState() => _AuthGateState();
+}
+
+class _AuthGateState extends State<AuthGate> {
+  // String userRole = ''; // customer or admin
+
+  // FirestoreService firestoreService = FirestoreService();
+
+  // Future<String> _getCurrentUserEmail() async {
+  //   print("3. Getting current user email");
+  //   try {
+  //     return await firestoreService.getCurrentUserEmail();
+  //   } catch (e) {
+  //     print("Could not get current email address");
+  //     return "";
+  //   }
+  // }
+
+  // _getUserData() async {
+  //   print("2. Getting user data");
+  //   String emailAddress = await _getCurrentUserEmail();
+  //   return firestoreService.getUserByEmail(emailAddress);
+  // }
+
+  // _getUserRole() async {
+  //   print("1. Getting user role");
+  //   Map<String, dynamic> data = await _getUserData();
+  //   String newUserRole = data['role'];
+  //   setState(() {
+  //     userRole = newUserRole;
+  //   });
+  // }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _getUserRole();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +57,11 @@ class AuthGate extends StatelessWidget {
           //user logged in
           if (snapshot.hasData) {
             return const HomePage();
-            //TODO: IF Admin, go to EditProductsPage()
+            // if (userRole == 'admin') {
+            //   return const EditProductsPage();
+            // } else {
+            //   return const HomePage();
+            // }
           }
           //user not logged in
           else {

@@ -1,16 +1,18 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class ImageFlagDropDown2 extends StatefulWidget {
-  const ImageFlagDropDown2({super.key, required this.category});
+class ImageFlagDropDown1 extends StatefulWidget {
+  const ImageFlagDropDown1({super.key, required this.category});
 
   final String category;
 
   @override
-  State<ImageFlagDropDown2> createState() => _ImageFlagDropDown2State();
+  State<ImageFlagDropDown1> createState() => _ImageFlagDropDown1State();
 }
 
-class _ImageFlagDropDown2State extends State<ImageFlagDropDown2> {
+class _ImageFlagDropDown1State extends State<ImageFlagDropDown1> {
   String? selectedValue = 'p1';
 
   String getFirstFlag() {
@@ -28,13 +30,13 @@ class _ImageFlagDropDown2State extends State<ImageFlagDropDown2> {
   void initState() {
     super.initState();
     selectedValue = getFirstFlag();
-    SelectedValue2Holder.selectedValue = selectedValue;
+    SelectedValueHolder1.selectedValue = selectedValue;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 80,
+      // width: 80,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -49,8 +51,8 @@ class _ImageFlagDropDown2State extends State<ImageFlagDropDown2> {
         onChanged: (String? newValue) {
           setState(() {
             selectedValue = newValue;
-            SelectedValue2Holder.selectedValue = newValue;
-            // print(SelectedValue2Holder.selectedValue);
+            SelectedValueHolder1.selectedValue = newValue;
+            print(SelectedValueHolder1.selectedValue);
           });
         },
         style: const TextStyle(
@@ -77,6 +79,6 @@ class _ImageFlagDropDown2State extends State<ImageFlagDropDown2> {
   }
 }
 
-class SelectedValue2Holder {
+class SelectedValueHolder1 {
   static String? selectedValue;
 }

@@ -222,6 +222,8 @@ class _ProductGridEditState extends State<ProductGridEdit> {
                                           newImageFlag = SelectedValueHolder
                                               .selectedValue!;
                                         } catch (e) {
+                                          Utility.showAlert(
+                                              context, "Invalid input");
                                           print("Input format error");
                                           //_toggleButtonState();
                                           return;
@@ -229,7 +231,7 @@ class _ProductGridEditState extends State<ProductGridEdit> {
                                         if (newQuantity <= 0 ||
                                             newPrice <= 0 ||
                                             newName.isEmpty) {
-                                          Utility.showSnackBar(
+                                          Utility.showAlert(
                                               context, "Invalid input");
                                           //_toggleButtonState();
                                           return;

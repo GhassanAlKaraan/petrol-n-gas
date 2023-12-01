@@ -2,8 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:petrol_n_gas/components/category_dropdown.dart';
-import 'package:petrol_n_gas/components/imageflag_dropdown_2.dart';
+import 'package:petrol_n_gas/components/imageflag_dropdown_1.dart';
 import 'package:petrol_n_gas/components/my_drawer.dart';
 import 'package:petrol_n_gas/components/my_textfield.dart';
 import 'package:petrol_n_gas/components/read_data/product_grid_edit.dart';
@@ -48,10 +47,60 @@ class _EditProductsPageState extends State<EditProductsPage> {
   // String? _selectedImageFlag;
 
   void _signout() {
+    //! TODO: possible error
     FirebaseAuthHelper().logout();
   }
 
-  int currentIndex = 0;
+  int currentIndex = 0; // 0 / 1 / 2
+  String currentCategory = ""; // petrol / gas / accessory
+
+  String _getCategoryByIndex() {
+    switch (currentIndex) {
+      case 0:
+        return "petrol";
+      case 1:
+        return "gas";
+      case 2:
+        return "accessory";
+      default:
+        return "";
+    }
+  }
+
+  String userRole = ''; // customer or admin
+
+  FirestoreService firestoreService = FirestoreService();
+
+  Future<String> _getCurrentUserEmail() async {
+    print("3. Getting current user email");
+    try {
+      return await firestoreService.getCurrentUserEmail();
+    } catch (e) {
+      print("Could not get current email address");
+      return "";
+    }
+  }
+
+  _getUserData() async {
+    print("2. Getting user data");
+    String emailAddress = await _getCurrentUserEmail();
+    return firestoreService.getUserByEmail(emailAddress);
+  }
+
+  _getUserRole() async {
+    print("1. Getting user role");
+    Map<String, dynamic> data = await _getUserData();
+    String newUserRole = data['role'];
+    setState(() {
+      userRole = newUserRole;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserRole();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +158,7 @@ class _EditProductsPageState extends State<EditProductsPage> {
           ),
         ],
       ),
-      drawer: const MyDrawer(),
+      drawer: MyDrawer(userRole: userRole),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         onPressed: () {
@@ -136,7 +185,7 @@ class _EditProductsPageState extends State<EditProductsPage> {
                         ],
                       ),
                       content: ConstrainedBox(
-                        constraints: const BoxConstraints(maxHeight: 450),
+                        constraints: const BoxConstraints(maxHeight: 400),
                         child: SingleChildScrollView(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,16 +194,16 @@ class _EditProductsPageState extends State<EditProductsPage> {
                                 thickness: 2,
                               ),
                               const SizedBox(height: 20),
-                              const Row(
+                              Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Category:",
-                                      style: TextStyle(fontSize: 20),
+                                      "Category: $currentCategory ",
+                                      style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
                                     ),
-// TODO: take it from the category page instead
-                                    CategoryDropDown(),
                                   ]),
                               const SizedBox(height: 22),
                               MyTextField(
@@ -180,12 +229,7 @@ class _EditProductsPageState extends State<EditProductsPage> {
                                     "Image Flag:",
                                     style: TextStyle(fontSize: 20),
                                   ),
-
-//! ISSUE, it should take the category
-//TODO: Add new product based on the page category that is in front of user.
-                                  ImageFlagDropDown2(
-                                      category:
-                                          SelectedCategoryHolder.selectedValue),
+                                  ImageFlagDropDown1(category: currentCategory),
                                 ],
                               ),
                             ],
@@ -209,54 +253,56 @@ class _EditProductsPageState extends State<EditProductsPage> {
                                       fontWeight: FontWeight.bold)),
                             ),
                             TextButton(
-                              onPressed: () async {
-                                //_toggleButtonState();
-                                try {
-                                  newCategory =
-                                      SelectedCategoryHolder.selectedValue;
-                                  newQuantity =
-                                      int.parse(_quantityController.text);
-                                  newPrice =
-                                      double.parse(_priceController.text);
-                                  newName = _nameController.text.toString();
-                                  newImageFlag =
-                                      SelectedValue2Holder.selectedValue!;
-                                } catch (e) {
-                                  print("Input format error");
-                                  //_toggleButtonState();
-                                  return;
-                                }
+                              onPressed: () {
+                                      try {
+                                        newCategory = currentCategory;
+                                        newQuantity = int.parse(
+                                            _quantityController.text.trim());
+                                        newPrice = double.parse(
+                                            _priceController.text.trim());
+                                        newName =
+                                            _nameController.text.toString();
+                                        newImageFlag =
+                                            SelectedValueHolder1.selectedValue!;
+                                      } catch (e) {
+                                        Utility.showAlert(
+                                            context, "Invalid input");
+                                        print("Input format error");
+                                        return;
+                                      }
 
-                                if (newQuantity <= 0 ||
-                                    newPrice <= 0 ||
-                                    newName.isEmpty) {
-                                  Utility.showSnackBar(
-                                      context, "Invalid input");
-                                  //_toggleButtonState();
-                                  return;
-                                }
+                                      if (newQuantity <= 0 ||
+                                          newPrice <= 0 ||
+                                          newName.isEmpty) {
+                                        Utility.showAlert(
+                                            context, "Invalid input");
+                                        return;
+                                      }
 
-                                try {
-                                  final ProductModel product = ProductModel(
-                                      name: newName,
-                                      price: newPrice,
-                                      quantity: newQuantity,
-                                      imageFlag: newImageFlag,
-                                      category: newCategory);
-                                  await firestoreService.createProduct(product);
-                                  Utility.showSnackBar(context, "Done");
-                                } catch (e) {
-                                  Utility.showSnackBar(
-                                      context, "Error updating the product");
-                                } finally {
-                                  //_toggleButtonState();
-                                  _nameController.clear();
-                                  _priceController.clear();
-                                  _quantityController.clear();
-                                  Navigator.pop(context);
-                                }
-                              },
-                              child: const Text('Create',
+                                      try {
+                                        final ProductModel product =
+                                            ProductModel(
+                                                name: newName,
+                                                price: newPrice,
+                                                quantity: newQuantity,
+                                                imageFlag: newImageFlag,
+                                                category: newCategory);
+                                        firestoreService
+                                            .createProduct(product);
+                                        Utility.showSnackBar(context, "Processing...");
+                                      } catch (e) {
+                                        Utility.showSnackBar(context,
+                                            "Error updating the product");
+                                      } finally {
+                                        _nameController.clear();
+                                        _priceController.clear();
+                                        _quantityController.clear();
+                                        Navigator.pop(context);
+                                      }
+                                    },
+                              child: 
+                              
+                              const Text('Create',
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold)),
@@ -326,15 +372,16 @@ class _EditProductsPageState extends State<EditProductsPage> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          currentIndex =
-              index1; //* the global current index will change depending on the index of the button
-          //print(currentIndex);
+          currentIndex = index1; //* Global current page index
+          currentCategory = _getCategoryByIndex();
+
+          //* debug here: //print(currentIndex); // print(currentCategory);
           choose(); //* the function will be called when the button is pressed
         });
       },
       child: AnimatedContainer(
         curve: Curves.linearToEaseOut,
-        width: currentIndex == index1 ? 140 : 50,
+        width: currentIndex == index1 ? 160 : 50,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: currentIndex == index1 ? Colors.blue : Colors.black87,

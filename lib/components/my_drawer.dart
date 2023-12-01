@@ -6,7 +6,9 @@ import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({super.key});
+  MyDrawer({super.key, required this.userRole});
+
+  String? userRole;
 
   void _signout() {
     FirebaseAuthHelper().logout();
@@ -39,38 +41,52 @@ class MyDrawer extends StatelessWidget {
                     Utility.launchPage(context, const HomePage());
                   },
                 ),
-                Divider(
-                  thickness: 1.0,
-                  color: Colors.grey[500],
-                ),
-                const Text("Admin Only",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue)),
-                const SizedBox(
-                  height: 40,
-                ),
-                ListTile(
-                  leading: const Icon(Icons.lock),
-                  title: const Text('Manage Products *',
-                      style: TextStyle(fontSize: 18)),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Utility.launchPage(context, const EditProductsPage());
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.lock),
-                  title: const Text('Manage orders *',
-                      style: TextStyle(fontSize: 18)),
-                  onTap: () {
-                    // Handle the tap event for this Tile
-                    Navigator.pop(context);
-                    Utility.showSnackBar(context, "Feature is not ready yet");
-                    //TODO: Utility.launchPage(context, const EditOrdersPage());
-                  },
-                ),
+                // userRole == null
+                //     ?
+                userRole == "admin"
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Divider(
+                            thickness: 1.0,
+                            color: Colors.grey[500],
+                          ),
+                          const Text("Admin Only",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue)),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.lock),
+                            title: const Text('Manage Products',
+                                style: TextStyle(fontSize: 18)),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Utility.launchPage(
+                                  context, const EditProductsPage());
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.lock),
+                            title: const Text('Manage orders',
+                                style: TextStyle(fontSize: 18)),
+                            onTap: () {
+                              // Handle the tap event for this Tile
+                              Navigator.pop(context);
+                              Utility.showSnackBar(
+                                  context, "Feature is not ready yet");
+                              //TODO: Utility.launchPage(context, const EditOrdersPage());
+                            },
+                          ),
+                        ],
+                      )
+                    // : Container(),
+                    : userRole == "customer"
+                        ? const Row(children: [Text("No Admin Access...")])
+                        : const Row(children: [Text("Loading...", style: TextStyle(fontSize: 20),)]),
                 Divider(
                   thickness: 1.0,
                   color: Colors.grey[500],
@@ -79,7 +95,7 @@ class MyDrawer extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue)),
+                        color: Colors.black87)),
                 const SizedBox(
                   height: 40,
                 ),
@@ -94,8 +110,8 @@ class MyDrawer extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.logout),
                   title: const Text('Sign Out', style: TextStyle(fontSize: 18)),
-                  onTap: () => Utility.showAlertDialog(
-                      context, _signout, "Sign Out"),
+                  onTap: () =>
+                      Utility.showAlertDialog(context, _signout, "Sign Out"),
                 ),
               ],
             ),

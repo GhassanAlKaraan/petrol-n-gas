@@ -51,7 +51,7 @@ class IntroScreen extends StatelessWidget {
             const Spacer(),
 
             // get started button
-            MyButton(text: "Get Started", onTap: () => Utility.launchPage(context, const AuthGate())),
+            MyButton(text: "Get Started", onTap: () => Utility.launchPage(context, AuthGate())),
 
             const Spacer(),
           ],
