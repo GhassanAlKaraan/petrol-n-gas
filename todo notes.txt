@@ -7,12 +7,12 @@ DONE 1. Change the create product functionality
 - Create the update order firestore function
 
 
-3. Change Auth Gate to redirect admin to Edit Products page
+DISREGARED 3. Change Auth Gate to redirect admin to Edit Products page
 - Fix the AuthGate
 - Create the firestore function to get role *
 
 
-4. Also change the access on the drawer
+DONE 4. Also change the access on the drawer
 - Fix the Drawer
 - Create the firestore function to get role *
 
