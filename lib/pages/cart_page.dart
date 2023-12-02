@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
 import 'package:provider/provider.dart';
 
-import '../model/cart_model.dart';
+import '../models/cart_model.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});

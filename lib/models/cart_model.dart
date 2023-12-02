@@ -2,8 +2,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:petrol_n_gas/model/order_model.dart';
-import 'package:petrol_n_gas/model/product_model.dart';
+import 'package:petrol_n_gas/models/order_model.dart';
+import 'package:petrol_n_gas/models/product_model.dart';
 import 'package:petrol_n_gas/services/firebase/firestore/firestore_service.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
 

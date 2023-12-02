@@ -1,6 +1,6 @@
 // * import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:petrol_n_gas/model/user_model.dart';
+import 'package:petrol_n_gas/models/user_model.dart';
 import 'package:petrol_n_gas/services/firebase/firestore/firestore_service.dart';
 
 import 'auth_exceptions/auth_exception_handler.dart';

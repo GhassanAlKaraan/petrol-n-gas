@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_n_gas/firebase_options.dart';
-import 'package:petrol_n_gas/model/cart_model.dart';
+import 'package:petrol_n_gas/models/cart_model.dart';
 import 'package:provider/provider.dart';
 import 'pages/intro_screen.dart';
 

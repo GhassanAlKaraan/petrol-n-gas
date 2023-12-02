@@ -4,7 +4,7 @@ import 'package:petrol_n_gas/pages/auth/login_or_register.dart';
 import '../../../pages/home_page.dart';
 
 class AuthGate extends StatefulWidget {
-  AuthGate({Key? key}) : super(key: key);
+  const AuthGate({Key? key}) : super(key: key);
 
   @override
   State<AuthGate> createState() => _AuthGateState();

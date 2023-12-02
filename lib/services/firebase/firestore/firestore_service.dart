@@ -2,9 +2,9 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:petrol_n_gas/model/order_model.dart';
-import 'package:petrol_n_gas/model/product_model.dart';
-import 'package:petrol_n_gas/model/user_model.dart';
+import 'package:petrol_n_gas/models/order_model.dart';
+import 'package:petrol_n_gas/models/product_model.dart';
+import 'package:petrol_n_gas/models/user_model.dart';
 
 class FirestoreService {
   //********** Working with Products/Orders **********//
@@ -46,9 +46,9 @@ class FirestoreService {
     return await _products
         .doc(docId)
         .delete()
-        .then((value) => print("Event Deleted"))
+        .then((value) => print("Product Deleted"))
         .catchError((_) {
-      print("Could not delete event");
+      print("Could not delete product");
     });
   }
 
@@ -83,8 +83,6 @@ class FirestoreService {
   }
 
   ///READ user
-  //TODO: Use it to give proper access
-
   Future<Map<String, dynamic>> getUserByEmail(String email) async {
     DocumentSnapshot ds = await _users.doc(email).get();
     try {
@@ -145,10 +143,33 @@ class FirestoreService {
   Stream<QuerySnapshot> getOrdersByUserEmail(String email) {
     return _orders
         .where('email', isEqualTo: email)
-        .orderBy('orderDate') //descending?
+        .orderBy('orderDate') //descending = false
+        .snapshots();
+  }
+  ///READ all orders 
+  Stream<QuerySnapshot> getOrders() {
+    return _orders
+        .orderBy('orderDate') //descending = false
         .snapshots();
   }
 
-  ///DELETE order
-  // TODO: remove order of a specific user?
+  /// DELETE
+  Future<void> deleteOrder(String docId) async {
+    return await _orders
+        .doc(docId)
+        .delete()
+        .then((value) => print("Order Deleted"))
+        .catchError((_) {
+      print("Could not delete order");
+    });
+  }
+
+  /// UPDATE
+  Future<void> approveOrder(String docId) async{
+    return await _orders.doc(docId).update({'orderStatus': true})
+    .then((value) => print("Order Approved"))
+        .catchError((_) {
+      print("Could not update order"); 
+      });
+  }
 }

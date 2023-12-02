@@ -1,11 +1,11 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:petrol_n_gas/components/imageflag_dropdown.dart';
 import 'package:petrol_n_gas/components/my_textfield.dart';
 import 'package:petrol_n_gas/components/product_item_tile_edit.dart';
-import 'package:petrol_n_gas/model/product_model.dart';
+import 'package:petrol_n_gas/models/product_model.dart';
 import 'package:petrol_n_gas/services/firebase/firestore/firestore_service.dart';
 import 'package:petrol_n_gas/utility/constants.dart';
 import 'package:petrol_n_gas/utility/utils.dart';

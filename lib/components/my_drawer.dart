@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:petrol_n_gas/pages/admin/editorders_page.dart';
 import 'package:petrol_n_gas/pages/admin/editproducts_page.dart';
 import 'package:petrol_n_gas/pages/edit_profile.dart';
 import 'package:petrol_n_gas/pages/home_page.dart';
 import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
 
+// ignore: must_be_immutable
 class MyDrawer extends StatelessWidget {
   MyDrawer({super.key, required this.userRole});
 
@@ -76,16 +78,15 @@ class MyDrawer extends StatelessWidget {
                             onTap: () {
                               // Handle the tap event for this Tile
                               Navigator.pop(context);
-                              Utility.showSnackBar(
-                                  context, "Feature is not ready yet");
-                              //TODO: Utility.launchPage(context, const EditOrdersPage());
+                             
+                              Utility.launchPage(context, const EditOrdersPage());
                             },
                           ),
                         ],
                       )
                     // : Container(),
                     : userRole == "customer"
-                        ? const Row(children: [Text("No Admin Access...")])
+                        ? const Row(children: [Text("No Admin Access.")])
                         : const Row(children: [Text("Loading...", style: TextStyle(fontSize: 20),)]),
                 Divider(
                   thickness: 1.0,

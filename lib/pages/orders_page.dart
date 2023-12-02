@@ -32,7 +32,10 @@ class OrdersPageState extends State<OrdersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Orders'),
+        title: Text('My Orders',style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey[700],
+          ),),
       ),
       body: email.isEmpty
           ? const Center(child: CircularProgressIndicator())
@@ -175,7 +178,7 @@ class OrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isOrderApproved = orderData['orderStatus'] == true;
-    final String status = isOrderApproved ? "Approved!" : "Pending Approval";
+    final String status = isOrderApproved ? "Approved! To be delivered" : "Pending Approval";
     final Color? statusColor =
         isOrderApproved ? Colors.green[100] : Colors.white10;
 
@@ -188,7 +191,7 @@ class OrderCard extends StatelessWidget {
       subtitle: Text(
         status,
         style: GoogleFonts.notoSerif(
-          fontSize: 18,
+          fontSize: 16,
         ),
       ),
       trailing: Text(

@@ -7,7 +7,15 @@ DONE 1. Change the create product functionality
 - Create the update order firestore function
 
 
-DISREGARED 3. Change Auth Gate to redirect admin to Edit Products page
+*Order Tile be like:
+-normal: pending approval (approved = false)
+-green: approved : Ready to be delivered. (approved = true)
+-Deleted: deduce the products from firestore 
+
+*Order Tile details must have: remove button, email address of the customer
+
+
+FAILED 3. Change Auth Gate to redirect admin to Edit Products page
 - Fix the AuthGate
 - Create the firestore function to get role *
 

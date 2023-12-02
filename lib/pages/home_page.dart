@@ -81,11 +81,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     _getUserName();
     _getUserRole();
+    
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    
     final PageController pageController = PageController(initialPage: 0);
     void goToPage(int index) {
       pageController.animateToPage(index,

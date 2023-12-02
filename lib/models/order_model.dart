@@ -1,4 +1,4 @@
-import 'package:petrol_n_gas/model/product_model.dart';
+import 'package:petrol_n_gas/models/product_model.dart';
 
 class OrderModel {
   final String email;

@@ -6,7 +6,7 @@ import 'package:petrol_n_gas/components/imageflag_dropdown_1.dart';
 import 'package:petrol_n_gas/components/my_drawer.dart';
 import 'package:petrol_n_gas/components/my_textfield.dart';
 import 'package:petrol_n_gas/components/read_data/product_grid_edit.dart';
-import 'package:petrol_n_gas/model/product_model.dart';
+import 'package:petrol_n_gas/models/product_model.dart';
 import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
 import 'package:petrol_n_gas/services/firebase/firestore/firestore_service.dart';
 import 'package:petrol_n_gas/utility/constants.dart';
@@ -47,7 +47,6 @@ class _EditProductsPageState extends State<EditProductsPage> {
   // String? _selectedImageFlag;
 
   void _signout() {
-    //! TODO: possible error
     FirebaseAuthHelper().logout();
   }
 
