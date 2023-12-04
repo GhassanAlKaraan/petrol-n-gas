@@ -27,3 +27,6 @@ DONE 4. Also change the access on the drawer
 
 DONE 5. Deduce the product quantity from firestore
 -create the firestore functions
+
+
+6. Sign out

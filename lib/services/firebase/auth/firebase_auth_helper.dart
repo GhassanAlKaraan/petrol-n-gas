@@ -47,7 +47,7 @@ class FirebaseAuthHelper {
 
     //* add user to firestore
     try {
-      UserModel user = UserModel(email: email, role: "customer");
+      UserModel user = UserModel(email: email, role: "customer", name: "USER");
       _firestoreService.createUser(user);
     } catch (e) {
       // ignore: avoid_print

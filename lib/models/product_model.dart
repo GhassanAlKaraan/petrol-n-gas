@@ -23,8 +23,8 @@ class ProductModel {
     };
   }
 
-  @override
-  String toString() {
-    return 'ProductModel{name: $name, price: $price, quantity: $quantity, category: $category, imageFlag: $imageFlag}';
-  }
+  // @override
+  // String toString() {
+  //   return 'ProductModel{name: $name, price: $price, quantity: $quantity, category: $category, imageFlag: $imageFlag}';
+  // }
 }
