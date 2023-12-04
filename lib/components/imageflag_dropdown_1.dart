@@ -36,7 +36,7 @@ class _ImageFlagDropDown1State extends State<ImageFlagDropDown1> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: 80,
+      width: 80,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),

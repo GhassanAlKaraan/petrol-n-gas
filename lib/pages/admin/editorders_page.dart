@@ -31,58 +31,58 @@ class EditOrdersPageState extends State<EditOrdersPage> {
         ),
       ),
       body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: StreamBuilder<QuerySnapshot>(
-                stream: firestoreService.getOrders(),
-                builder: (context, snapshot) {
-                  // CASE: ERROR
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text('Error: ${snapshot.error}'),
-                    );
-                  }
+        padding: const EdgeInsets.all(8.0),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: firestoreService.getOrders(),
+          builder: (context, snapshot) {
+            // CASE: ERROR
+            if (snapshot.hasError) {
+              return Center(
+                child: Text('Error: ${snapshot.error}'),
+              );
+            }
 
-                  // CASE: NO DATA
-                  if (!snapshot.hasData) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+            // CASE: NO DATA
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-                  // CASE: HAS DATA
-                  final List<DocumentSnapshot> orders = snapshot.data!.docs;
-                  // Snapshot of docs
+            // CASE: HAS DATA
+            final List<DocumentSnapshot> orders = snapshot.data!.docs;
+            // Snapshot of docs
 
-                  return ListView.builder(
-                    itemCount: orders.length,
-                    itemBuilder: (context, index) {
-                      final String orderDocId = orders[index].id;
-                      // Document Content of type Object?, representing the fields
-                      final order = orders[index].data();
+            return ListView.builder(
+              itemCount: orders.length,
+              itemBuilder: (context, index) {
+                final String orderDocId = orders[index].id;
+                // Document Content of type Object?, representing the fields
+                final order = orders[index].data();
 
-                      // Child Collection: List of Orders
-                      final CollectionReference orderProducts =
-                          orders[index].reference.collection('orderProducts');
+                // Child Collection: List of Orders
+                final CollectionReference orderProducts =
+                    orders[index].reference.collection('orderProducts');
 
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: OrderCard(
-                          orderDocId: orderDocId,
-                          orderData: order, // the fields
-                          products: orderProducts,
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: OrderCard(
+                    orderDocId: orderDocId,
+                    orderData: order, // the fields
+                    products: orderProducts,
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }
 
-class OrderCard extends StatelessWidget {
-  OrderCard({
+class OrderCard extends StatefulWidget {
+  const OrderCard({
     super.key,
     required this.orderData,
     required this.products,
@@ -93,13 +93,17 @@ class OrderCard extends StatelessWidget {
   final dynamic orderData;
   final CollectionReference products;
 
+  @override
+  State<OrderCard> createState() => _OrderCardState();
+}
+
+class _OrderCardState extends State<OrderCard> {
   Future<List<DocumentSnapshot>> getAllProducts() async {
-    final querySnapshot = await products.get();
+    final querySnapshot = await widget.products.get();
     return querySnapshot.docs;
   }
-  // to get each document data: prod = querySnapshot.docs[index].data();
-  // to get each field data: prod["productName"]
 
+  // to get each document data: prod = querySnapshot.docs[index].data();
   String convertOrderDate(dynamic orderData) {
     final Timestamp ts = orderData['orderDate'];
     final DateTime dt = ts.toDate();
@@ -107,14 +111,51 @@ class OrderCard extends StatelessWidget {
   }
 
   final FirestoreService firestoreService = FirestoreService();
+
   _approveOrder(context) async {
     try {
-      await firestoreService.approveOrder(orderDocId);
+      await firestoreService.approveOrder(widget.orderDocId);
       print("Order Approved");
     } catch (e) {
       print("Order approval failed");
       Utility.showSnackBar(context, "Could not approve order");
     }
+  }
+
+  //List of maps
+  List<Map<String, dynamic>> productsList = [];
+
+  List<Map<String, dynamic>> _getOrderProducts(
+      List<DocumentSnapshot> orderProducts) {
+    List<Map<String, dynamic>> productsData = [];
+
+    for (DocumentSnapshot doc in orderProducts) {
+      Map<String, dynamic> productMap = {
+        'category': doc['category'],
+        'quantity': doc['quantity'],
+        'name': doc['name'],
+        'price': doc['price'],
+        'imageFlag': doc['imageFlag'],
+      };
+      productsData.add(productMap);
+    }
+
+    return productsData;
+  }
+
+//! CAUTION !//
+  _finishOrder(
+      List<Map<String, dynamic>> productsList, String orderDocId) async {
+    for (Map<String, dynamic> map in productsList) {
+      try {
+        await firestoreService.updateProductByName(map);
+      } on FirebaseFirestore catch (e) {
+        print("MASSIVE ERROR");
+        print(e);
+      }
+    }
+
+    await firestoreService.deleteOrder(orderDocId);
   }
 
   Future<void> showOrderProducts(BuildContext context) async {
@@ -134,7 +175,11 @@ class OrderCard extends StatelessWidget {
                 style: kTxtNormal,
               ),
               IconButton(
-                  onPressed: () {}, //TODO: Process order
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _finishOrder(productsList, widget.orderDocId);
+                    
+                  },
                   icon: const Icon(
                     Icons.check_box,
                     size: 36,
@@ -147,7 +192,7 @@ class OrderCard extends StatelessWidget {
               children: [
                 const Text("User:"),
                 Text(
-                  orderData['email'],
+                  widget.orderData['email'],
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),
@@ -165,18 +210,19 @@ class OrderCard extends StatelessWidget {
                           return Text('Error: ${snapshot.error}');
                         } else {
                           final orderProducts = snapshot.data ?? [];
+
+                          print("!!! ATTEMPT !!!");
+                          productsList = _getOrderProducts(orderProducts);
+
+                          print("Saving list of maps was successful");
                           return SingleChildScrollView(
                             child: ListBody(
                               children: orderProducts
                                   .map((doc) => doc['category'] == 'petrol'
                                       ? Text(
-                                          '${doc['quantity']} Liters of ${doc['name']}',
-                                          //style: kTxtSmall,
-                                        )
+                                          '${doc['quantity']} Liters of ${doc['name']}')
                                       : Text(
-                                          '${doc['quantity']} Pieces of ${doc['name']}',
-                                          //style: kTxtSmall,
-                                        ))
+                                          '${doc['quantity']} Pieces of ${doc['name']}'))
                                   .toList(),
                             ),
                           );
@@ -229,7 +275,7 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isOrderApproved = orderData['orderStatus'] == true;
+    final bool isOrderApproved = widget.orderData['orderStatus'] == true;
     final String status =
         isOrderApproved ? "Ready to Deliver" : "Pending Approval";
     final Color? statusColor =
@@ -238,7 +284,7 @@ class OrderCard extends StatelessWidget {
     return ListTile(
       onTap: () => showOrderProducts(context),
       title: Text(
-        convertOrderDate(orderData),
+        convertOrderDate(widget.orderData),
         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
       ),
       subtitle: Text(
@@ -248,7 +294,7 @@ class OrderCard extends StatelessWidget {
         ),
       ),
       trailing: Text(
-        '\$${orderData['totalAmount'].toStringAsFixed(2)}',
+        '\$${widget.orderData['totalAmount'].toStringAsFixed(2)}',
         style: const TextStyle(fontSize: 16),
       ),
       shape: RoundedRectangleBorder(

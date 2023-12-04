@@ -51,7 +51,7 @@ class _EditProductsPageState extends State<EditProductsPage> {
   }
 
   int currentIndex = 0; // 0 / 1 / 2
-  String currentCategory = ""; // petrol / gas / accessory
+  String currentCategory = "petrol"; // petrol / gas / accessory
 
   String _getCategoryByIndex() {
     switch (currentIndex) {
@@ -253,55 +253,49 @@ class _EditProductsPageState extends State<EditProductsPage> {
                             ),
                             TextButton(
                               onPressed: () {
-                                      try {
-                                        newCategory = currentCategory;
-                                        newQuantity = int.parse(
-                                            _quantityController.text.trim());
-                                        newPrice = double.parse(
-                                            _priceController.text.trim());
-                                        newName =
-                                            _nameController.text.toString();
-                                        newImageFlag =
-                                            SelectedValueHolder1.selectedValue!;
-                                      } catch (e) {
-                                        Utility.showAlert(
-                                            context, "Invalid input");
-                                        print("Input format error");
-                                        return;
-                                      }
+                                try {
+                                  newCategory = currentCategory;
+                                  newQuantity = int.parse(
+                                      _quantityController.text.trim());
+                                  newPrice = double.parse(
+                                      _priceController.text.trim());
+                                  newName = _nameController.text.toString();
+                                  newImageFlag =
+                                      SelectedValueHolder1.selectedValue!;
+                                } catch (e) {
+                                  Utility.showAlert(context, "Invalid input");
+                                  print("Input format error");
+                                  return;
+                                }
 
-                                      if (newQuantity <= 0 ||
-                                          newPrice <= 0 ||
-                                          newName.isEmpty) {
-                                        Utility.showAlert(
-                                            context, "Invalid input");
-                                        return;
-                                      }
+                                if (newQuantity <= 0 ||
+                                    newPrice <= 0 ||
+                                    newName.isEmpty) {
+                                  Utility.showAlert(context, "Invalid input");
+                                  return;
+                                }
 
-                                      try {
-                                        final ProductModel product =
-                                            ProductModel(
-                                                name: newName,
-                                                price: newPrice,
-                                                quantity: newQuantity,
-                                                imageFlag: newImageFlag,
-                                                category: newCategory);
-                                        firestoreService
-                                            .createProduct(product);
-                                        Utility.showSnackBar(context, "Processing...");
-                                      } catch (e) {
-                                        Utility.showSnackBar(context,
-                                            "Error updating the product");
-                                      } finally {
-                                        _nameController.clear();
-                                        _priceController.clear();
-                                        _quantityController.clear();
-                                        Navigator.pop(context);
-                                      }
-                                    },
-                              child: 
-                              
-                              const Text('Create',
+                                try {
+                                  final ProductModel product = ProductModel(
+                                      name: newName,
+                                      price: newPrice,
+                                      quantity: newQuantity,
+                                      imageFlag: newImageFlag,
+                                      category: newCategory);
+                                  firestoreService.createProduct(product);
+                                  Utility.showSnackBar(
+                                      context, "Processing...");
+                                } catch (e) {
+                                  Utility.showSnackBar(
+                                      context, "Error updating the product");
+                                } finally {
+                                  _nameController.clear();
+                                  _priceController.clear();
+                                  _quantityController.clear();
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: const Text('Create',
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold)),
