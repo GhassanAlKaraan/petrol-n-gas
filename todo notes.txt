@@ -2,20 +2,20 @@ DONE 1. Change the create product functionality
 - Fix the Alert Dialog
 
 
-2. Make the approve orders page
+DONE 2. Make the approve orders page
 - Create the page
 - Create the update order firestore function
 
 
-*Order Tile be like:
+Order Tile be like:
 -normal: pending approval (approved = false)
 -green: approved : Ready to be delivered. (approved = true)
 -Deleted: deduce the products from firestore 
 
-*Order Tile details must have: remove button, email address of the customer
+Order Tile details must have: remove button, email address of the customer
 
 
-FAILED 3. Change Auth Gate to redirect admin to Edit Products page
+REJECTED 3. Change Auth Gate to redirect admin to Edit Products page
 - Fix the AuthGate
 - Create the firestore function to get role *
 
@@ -25,4 +25,5 @@ DONE 4. Also change the access on the drawer
 - Create the firestore function to get role *
 
 
-5. Testing and Fixes
+DONE 5. Deduce the product quantity from firestore
+-create the firestore functions
