@@ -73,6 +73,8 @@ class _ImageFlagDropDown1State extends State<ImageFlagDropDown1> {
                   ]
                 : const [
                     DropdownMenuItem(value: 'a1', child: Text('a1')),
+                    DropdownMenuItem(value: 'a2', child: Text('a2')),
+                    DropdownMenuItem(value: 'a3', child: Text('a3')),
                   ],
       ),
     );

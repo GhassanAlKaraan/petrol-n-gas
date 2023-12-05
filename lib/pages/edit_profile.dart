@@ -97,6 +97,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+            onPressed: () {
+              Utility.replacePage(context, const HomePage());
+            },
+            icon: const Icon(Icons.arrow_back)),
         title: Text(
           "Edit Profile",
           style: TextStyle(

@@ -3,6 +3,7 @@ import 'package:petrol_n_gas/pages/admin/editorders_page.dart';
 import 'package:petrol_n_gas/pages/admin/editproducts_page.dart';
 import 'package:petrol_n_gas/pages/edit_profile.dart';
 import 'package:petrol_n_gas/pages/home_page.dart';
+import 'package:petrol_n_gas/pages/intro_screen.dart';
 import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
 
@@ -12,8 +13,11 @@ class MyDrawer extends StatelessWidget {
 
   String? userRole;
 
-  void _signout() {
+  void _signout(context) {
     FirebaseAuthHelper().logout();
+    Navigator.of(context).pop();
+    Utility.replacePage(context, const IntroScreen());
+    Utility.showSnackBar(context, "You're signed out now.");
   }
 
   @override
@@ -40,11 +44,9 @@ class MyDrawer extends StatelessWidget {
                   title: const Text('Home', style: TextStyle(fontSize: 18)),
                   onTap: () {
                     Navigator.pop(context);
-                    Utility.launchPage(context, const HomePage());
+                    Utility.replacePage(context, const HomePage());
                   },
                 ),
-                // userRole == null
-                //     ?
                 userRole == "admin"
                     ? Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +69,7 @@ class MyDrawer extends StatelessWidget {
                                 style: TextStyle(fontSize: 18)),
                             onTap: () {
                               Navigator.pop(context);
-                              Utility.launchPage(
+                              Utility.replacePage(
                                   context, const EditProductsPage());
                             },
                           ),
@@ -76,10 +78,8 @@ class MyDrawer extends StatelessWidget {
                             title: const Text('Manage orders',
                                 style: TextStyle(fontSize: 18)),
                             onTap: () {
-                              // Handle the tap event for this Tile
-                              Navigator.pop(context);
-                             
-                              Utility.launchPage(context, const EditOrdersPage());
+                              Utility.replacePage(
+                                  context, const EditOrdersPage());
                             },
                           ),
                         ],
@@ -87,7 +87,12 @@ class MyDrawer extends StatelessWidget {
                     // : Container(),
                     : userRole == "customer"
                         ? const Row(children: [Text("No Admin Access.")])
-                        : const Row(children: [Text("Loading...", style: TextStyle(fontSize: 20),)]),
+                        : const Row(children: [
+                            Text(
+                              "Loading...",
+                              style: TextStyle(fontSize: 20),
+                            )
+                          ]),
                 Divider(
                   thickness: 1.0,
                   color: Colors.grey[500],
@@ -104,15 +109,14 @@ class MyDrawer extends StatelessWidget {
                   leading: const Icon(Icons.settings),
                   title: const Text('Profile', style: TextStyle(fontSize: 18)),
                   onTap: () {
-                    Navigator.pop(context);
-                    Utility.launchPage(context, const EditProfilePage());
+                    Utility.replacePage(context, const EditProfilePage());
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout),
                   title: const Text('Sign Out', style: TextStyle(fontSize: 18)),
-                  onTap: () =>
-                      Utility.showAlertDialog(context, _signout, "Sign Out"),
+                  onTap: () => Utility.showAlertDialog(
+                      context, () => _signout(context), "Sign Out"),
                 ),
               ],
             ),

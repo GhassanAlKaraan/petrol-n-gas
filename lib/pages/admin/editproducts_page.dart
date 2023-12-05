@@ -7,7 +7,6 @@ import 'package:petrol_n_gas/components/my_drawer.dart';
 import 'package:petrol_n_gas/components/my_textfield.dart';
 import 'package:petrol_n_gas/components/read_data/product_grid_edit.dart';
 import 'package:petrol_n_gas/models/product_model.dart';
-import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
 import 'package:petrol_n_gas/services/firebase/firestore/firestore_service.dart';
 import 'package:petrol_n_gas/utility/constants.dart';
 import 'package:petrol_n_gas/utility/utils.dart';
@@ -46,9 +45,9 @@ class _EditProductsPageState extends State<EditProductsPage> {
   final TextEditingController _priceController = TextEditingController();
   // String? _selectedImageFlag;
 
-  void _signout() {
-    FirebaseAuthHelper().logout();
-  }
+  // void _signout() {
+  //   FirebaseAuthHelper().logout();
+  // }
 
   int currentIndex = 0; // 0 / 1 / 2
   String currentCategory = "petrol"; // petrol / gas / accessory
@@ -135,22 +134,18 @@ class _EditProductsPageState extends State<EditProductsPage> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 24.0),
-            child: GestureDetector(
-              onTap: () =>
-                  Utility.showAlertDialog(context, _signout, "Sign Out"),
-              child: Container(
-                height: 50,
-                width: 50,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.grey,
-                  ),
+            child: Container(
+              height: 50,
+              width: 50,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.person,
+                  color: Colors.grey,
                 ),
               ),
             ),

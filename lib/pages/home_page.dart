@@ -5,9 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:petrol_n_gas/components/my_drawer.dart';
 import 'package:petrol_n_gas/components/read_data/product_grid.dart';
 import 'package:petrol_n_gas/pages/orders_page.dart';
-import 'package:petrol_n_gas/services/firebase/auth/firebase_auth_helper.dart';
 import 'package:petrol_n_gas/services/firebase/firestore/firestore_service.dart';
-import 'package:petrol_n_gas/utility/utils.dart';
 import 'cart_page.dart';
 
 //tab bat
@@ -38,9 +36,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void _signout() {
-    FirebaseAuthHelper().logout();
-  }
+
+  // void _signout() {
+  //   FirebaseAuthHelper().logout();
+  // }
 
   int currentIndex = 0;
   String currentUserName = " ";
@@ -81,13 +80,12 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     _getUserName();
     _getUserRole();
-    
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    
     final PageController pageController = PageController(initialPage: 0);
     void goToPage(int index) {
       pageController.animateToPage(index,
@@ -119,22 +117,18 @@ class _HomePageState extends State<HomePage> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 24.0),
-            child: GestureDetector(
-              onTap: () =>
-                  Utility.showAlertDialog(context, _signout, "Sign Out"),
-              child: Container(
-                height: 50,
-                width: 50,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.grey,
-                  ),
+            child: Container(
+              height: 50,
+              width: 50,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Center(
+                child: Icon(
+                  Icons.person,
+                  color: Colors.grey,
                 ),
               ),
             ),

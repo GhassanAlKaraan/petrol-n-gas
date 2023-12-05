@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:petrol_n_gas/pages/home_page.dart';
 import 'package:petrol_n_gas/services/firebase/firestore/firestore_service.dart';
 import 'package:intl/intl.dart';
 import 'package:petrol_n_gas/utility/constants.dart';
@@ -22,6 +23,11 @@ class EditOrdersPageState extends State<EditOrdersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Utility.replacePage(context, const HomePage());
+            },
+            icon: const Icon(Icons.arrow_back)),
         title: Text(
           'All Orders',
           style: TextStyle(
@@ -143,7 +149,6 @@ class _OrderCardState extends State<OrderCard> {
     return productsData;
   }
 
-//! CAUTION !//
   _finishOrder(
       List<Map<String, dynamic>> productsList, String orderDocId) async {
     for (Map<String, dynamic> map in productsList) {
@@ -190,11 +195,19 @@ class _OrderCardState extends State<OrderCard> {
             constraints: const BoxConstraints(maxHeight: 200),
             child: Column(
               children: [
-                const Text("User:"),
+                Divider(
+                  thickness: 1.0,
+                  color: Colors.grey[500],
+                ),
+                Text("User:", style: kTxtSmall),
                 Text(
                   widget.orderData['email'],
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Divider(
+                  thickness: 1.0,
+                  color: Colors.grey[500],
                 ),
                 const SizedBox(height: 20),
                 Expanded(
